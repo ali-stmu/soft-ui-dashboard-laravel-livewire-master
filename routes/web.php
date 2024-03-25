@@ -11,6 +11,8 @@ use App\Http\Livewire\Billing;
 use App\Http\Livewire\Profile;
 use App\Http\Livewire\Tables;
 use App\Http\Livewire\Request\PendingRequest;
+use App\Http\Livewire\Request\MyRequest;
+use App\Http\Livewire\Request\CompletedRequest;
 use App\Http\Livewire\StaticSignIn;
 use App\Http\Livewire\StaticSignUp;
 use App\Http\Livewire\Rtl;
@@ -49,6 +51,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/tables', Tables::class)->name('tables');
     Route::get('/pending-request', PendingRequest::class)->name('pending-request');
+    Route::get('/my-request', MyRequest::class)->name('my-request');
+    Route::get('/completed-request', CompletedRequest::class)->name('completed-request');
     Route::get('/static-sign-in', StaticSignIn::class)->name('sign-in');
     Route::get('/static-sign-up', StaticSignUp::class)->name('static-sign-up');
     Route::get('/rtl', Rtl::class)->name('rtl');
