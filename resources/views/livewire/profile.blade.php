@@ -85,8 +85,9 @@
                         <li class="nav-item">
                             <a class="nav-link mb-0 px-0 py-1 " data-bs-toggle="tab" href="javascript:;" role="tab"
                                 aria-controls="dashboard" aria-selected="false">
-                                <svg class="text-dark" width="16px" height="16px" viewBox="0 0 40 40" version="1.1"
-                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <svg class="text-dark" width="16px" height="16px" viewBox="0 0 40 40"
+                                    version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <title>settings</title>
                                     <g id="Basic-Elements" stroke="none" stroke-width="1" fill="none"
                                         fill-rule="evenodd">
@@ -94,7 +95,8 @@
                                             fill="#FFFFFF" fill-rule="nonzero">
                                             <g id="Icons-with-opacity" transform="translate(1716.000000, 291.000000)">
                                                 <g id="settings" transform="translate(304.000000, 151.000000)">
-                                                    <polygon class="color-background" id="Path" opacity="0.596981957"
+                                                    <polygon class="color-background" id="Path"
+                                                        opacity="0.596981957"
                                                         points="18.0883333 15.7316667 11.1783333 8.82166667 13.3333333 6.66666667 6.66666667 0 0 6.66666667 6.66666667 13.3333333 8.82166667 11.1783333 15.315 17.6716667">
                                                     </polygon>
                                                     <path class="color-background"
@@ -256,7 +258,8 @@
                         </li>
                         <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2">
                             <div class="avatar me-3">
-                                <img src="../assets/img/ivana-square.jpg" alt="kal" class="border-radius-lg shadow">
+                                <img src="../assets/img/ivana-square.jpg" alt="kal"
+                                    class="border-radius-lg shadow">
                             </div>
                             <div class="d-flex align-items-start flex-column justify-content-center">
                                 <h6 class="mb-0 text-sm">Ivanna</h6>
@@ -324,11 +327,13 @@
                                                 <img alt="Image placeholder" src="../assets/img/team-1.jpg">
                                             </a>
                                             <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Milly">
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                title="Ryan Milly">
                                                 <img alt="Image placeholder" src="../assets/img/team-2.jpg">
                                             </a>
                                             <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                data-bs-toggle="tooltip" data-bs-placement="bottom" title="Nick Daniel">
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                title="Nick Daniel">
                                                 <img alt="Image placeholder" src="../assets/img/team-3.jpg">
                                             </a>
                                             <a href="javascript:;" class="avatar avatar-xs rounded-circle"
@@ -363,7 +368,8 @@
                                             Project</button>
                                         <div class="avatar-group mt-2">
                                             <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                data-bs-toggle="tooltip" data-bs-placement="bottom" title="Nick Daniel">
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                title="Nick Daniel">
                                                 <img alt="Image placeholder" src="../assets/img/team-3.jpg">
                                             </a>
                                             <a href="javascript:;" class="avatar avatar-xs rounded-circle"
@@ -376,7 +382,8 @@
                                                 <img alt="Image placeholder" src="../assets/img/team-1.jpg">
                                             </a>
                                             <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Milly">
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                title="Ryan Milly">
                                                 <img alt="Image placeholder" src="../assets/img/team-2.jpg">
                                             </a>
                                         </div>
@@ -411,11 +418,13 @@
                                                 <img alt="Image placeholder" src="../assets/img/team-4.jpg">
                                             </a>
                                             <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                data-bs-toggle="tooltip" data-bs-placement="bottom" title="Nick Daniel">
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                title="Nick Daniel">
                                                 <img alt="Image placeholder" src="../assets/img/team-3.jpg">
                                             </a>
                                             <a href="javascript:;" class="avatar avatar-xs rounded-circle"
-                                                data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Milly">
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                title="Ryan Milly">
                                                 <img alt="Image placeholder" src="../assets/img/team-2.jpg">
                                             </a>
                                             <a href="javascript:;" class="avatar avatar-xs rounded-circle"
@@ -445,4 +454,3 @@
     </div>
 </div>
 </div>
-
