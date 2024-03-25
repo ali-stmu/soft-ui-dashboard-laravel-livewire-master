@@ -173,7 +173,7 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">My Request</span>
+                    <span class="nav-link-text ms-1">Add a new Request</span>
                 </a>
             </li>
             <li class="nav-item">
