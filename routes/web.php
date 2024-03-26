@@ -10,6 +10,7 @@ use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Billing;
 use App\Http\Livewire\Profile;
 use App\Http\Livewire\Tables;
+use App\Http\Livewire\AddFaculty;
 use App\Http\Livewire\Request\PendingRequest;
 use App\Http\Livewire\Request\MyRequest;
 use App\Http\Livewire\Request\CompletedRequest;
@@ -50,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/billing', Billing::class)->name('billing');
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/tables', Tables::class)->name('tables');
+    Route::get('/add-faculty', AddFaculty::class)->name('add-faculty');
     Route::get('/pending-request', PendingRequest::class)->name('pending-request');
     Route::get('/my-request', MyRequest::class)->name('my-request');
     Route::get('/completed-request', CompletedRequest::class)->name('completed-request');

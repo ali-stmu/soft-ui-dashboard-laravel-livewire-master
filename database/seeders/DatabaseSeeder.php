@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-
 use App\Models\User;
 
 class DatabaseSeeder extends Seeder
@@ -16,10 +15,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()->create([
-            'name' => 'admin',
-            'email' => 'admin@softui.com',
-            'password' => Hash::make('secret')
-        ]);
+        // User::factory()->create([
+        //     'name' => 'admin',
+        //     'email' => 'admin@softui.com',
+        //     'password' => Hash::make('secret')
+        // ]);
+        $this->call(FacultyTypeSeeder::class);
     }
 }
