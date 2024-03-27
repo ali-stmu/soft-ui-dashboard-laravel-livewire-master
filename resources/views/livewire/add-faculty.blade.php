@@ -2,7 +2,7 @@
 
 <div>
     <p>Add Faculty</p>
-    <form wire:submit.prevent="save" action="#" method="POST" role="form text-left">
+    <form wire:submit.prevent="save" role="form text-left">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -49,11 +49,16 @@
                                     </th>
                                     <th
                                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                        Created By
+                                        Created/Updated By
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Time Stamp
                                     </th>
                                     <th
                                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                        Date
+                                        Actions
                                     </th>
                                 </tr>
                             </thead>
@@ -86,6 +91,19 @@
                                                 <div class="my-auto">
                                                     <h6 class="mb-0 text-sm">{{ $faculty->updated_at }}</h6>
                                                 </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <button wire:click="edit({{ $faculty->id }})"
+                                                    class="btn btn-sm btn-primary me-2">
+                                                    Edit
+                                                </button>
+
+                                                <button wire:click="delete({{ $faculty->id }})"
+                                                    class="btn btn-sm btn-danger">
+                                                    Delete
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
