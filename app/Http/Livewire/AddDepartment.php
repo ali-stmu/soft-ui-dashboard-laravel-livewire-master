@@ -42,17 +42,23 @@ class AddDepartment extends Component
             'typeId' => 'required',
             'facultyId' => 'required',
         ]);
-
-        Department::create([
-            'name' => $this->name,
-            'type' => $this->typeId,
-            'faculty_id' => $this->facultyId,
-            'created_by_id' => Auth::id(),
-        ]);
-
-        // Reset input fields after saving
-        $this->reset(['name', 'typeId', 'facultyId']);
-        $this->loadDepartment(); // Reload department list after saving
+        if ($this->departmentId) {
+            // Update existing department
+            $this->updateDepartment();
+        } else {
+            // Save new department
+            Department::create([
+                'name' => $this->name,
+                'type_id' => $this->typeId,
+                'faculty_id' => $this->facultyId,
+                'created_by_id' => Auth::id(),
+            ]);
+    
+            // Reset input fields after saving
+            $this->reset(['name', 'typeId', 'facultyId']);
+            $this->loadDepartment(); // Reload department list after saving
+        }
+       
     }
 
     // Edit department

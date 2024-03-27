@@ -89,7 +89,9 @@
                                         <td>
                                             <div class="d-flex px-2">
                                                 <div class="my-auto">
-                                                    <h6 class="mb-0 text-sm">{{ $faculty->updated_at }}</h6>
+                                                    <h6 class="mb-0 text-sm">
+                                                        {{ \Carbon\Carbon::parse($faculty->updated_at)->addHours(5)->format('Y-m-d H:i:s') }}
+                                                    </h6>
                                                 </div>
                                             </div>
                                         </td>
