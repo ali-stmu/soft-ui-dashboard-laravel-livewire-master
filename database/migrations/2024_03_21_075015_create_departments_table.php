@@ -17,7 +17,7 @@ class CreateDepartmentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('faculty_id');
             $table->string('name');
-            $table->enum('type', ['academic', 'nonacademic']);
+            $table->enum('type', ['Academic', 'Non-Academic']);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->unsignedBigInteger('created_by_id')->nullable();
             $table->foreign('faculty_id')->references('id')->on('faculty')->onDelete('cascade');

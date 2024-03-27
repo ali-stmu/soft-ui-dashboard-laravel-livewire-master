@@ -1,51 +1,70 @@
-<!-- livewire/add-faculty.blade.php -->
-
 <div>
-    <p>Add Faculty</p>
-    <form role="form text-left">
+    <div>
         <div class="row">
-            <div class="col-md-6">
+            <div class = "col">
                 <div class="form-group">
-                    <label for="faculty-name" class="form-control-label">{{ __('Faculty Name') }}</label>
+                    <label for="department-name" class="form-control-label">Department Name</label>
                     <input wire:model="name" class="form-control @error('name') border border-danger @enderror"
-                        type="text" placeholder="Faculty Name" id="faculty-name">
+                        type="text" placeholder="Department Name" id="department-name">
                     @error('name')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class = "col">
                 <div class="form-group">
-                    <label for="faculty-location" class="form-control-label">{{ __('Location') }}</label>
-                    <input wire:model="location" class="form-control @error('location') border border-danger @enderror"
-                        type="text" placeholder="Location" id="faculty-location">
-                    @error('location')
+                    <label for="type-id" class="form-control-label">Type</label>
+                    <select wire:model="typeId" class="form-control @error('typeId') border border-danger @enderror"
+                        id="type-id">
+                        <option value="">Select Type</option>
+                        @foreach ($facultyTypes as $type)
+                            <option value="{{ $type->id }}">{{ $type->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('typeId')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
         </div>
-        <div class="d-flex justify-content-center">
-            <button wire:click="save" class="btn bg-gradient-dark btn-md mt-4 mb-4">{{ __('Save') }}</button>
-        </div>
-    </form>
 
+        <div class="form-group">
+            <label for="faculty-id" class="form-control-label">Faculty</label>
+            <select wire:model="facultyId" class="form-control @error('facultyId') border border-danger @enderror"
+                id="faculty-id">
+                <option value="">Select Faculty</option>
+                @foreach ($faculties as $faculty)
+                    <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                @endforeach
+            </select>
+            @error('facultyId')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <button wire:click="saveDepartment" class="btn btn-primary">Save Department</button>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>Faculty table</h6>
+                    <h6>Department table</h6>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
                         <table class="table align-items-center justify-content-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Name
                                     </th>
                                     <th
                                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                        Location
+                                        Type
+                                    </th>
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Faculty Name
                                     </th>
                                     <th
                                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -63,47 +82,56 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($faculties as $faculty)
+                                @foreach ($Department as $department)
                                     <tr>
                                         <td>
                                             <div class="d-flex px-2">
                                                 <div class="my-auto">
-                                                    <h6 class="mb-0 text-sm">{{ $faculty->name }}</h6>
+                                                    <h6 class="mb-0 text-sm">{{ $department->name }}</h6>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex px-2">
                                                 <div class="my-auto">
-                                                    <h6 class="mb-0 text-sm">{{ $faculty->location }}</h6>
+                                                    <h6 class="mb-0 text-sm">{{ $department->type }}</h6>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex px-2">
                                                 <div class="my-auto">
-                                                    <h6 class="mb-0 text-sm">{{ $faculty->createdBy->name }}</h6>
+                                                    <h6 class="mb-0 text-sm">{{ $department->faculty->name }}</h6>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex px-2">
                                                 <div class="my-auto">
-                                                    <h6 class="mb-0 text-sm">{{ $faculty->updated_at }}</h6>
+                                                    <h6 class="mb-0 text-sm">{{ $department->createdBy->name }}
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex px-2">
+                                                <div class="my-auto">
+                                                    <h6 class="mb-0 text-sm">{{ $department->updated_at }}</h6>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex">
-                                                <button wire:click="edit({{ $faculty->id }})"
+                                                <button wire:click="edit({{ $department->id }})"
                                                     class="btn btn-sm btn-primary me-2">
                                                     Edit
                                                 </button>
 
-                                                <button wire:click="delete({{ $faculty->id }})"
+                                                <button wire:click="delete({{ $department->id }})"
                                                     class="btn btn-sm btn-danger">
                                                     Delete
                                                 </button>
+
                                             </div>
                                         </td>
                                     </tr>
