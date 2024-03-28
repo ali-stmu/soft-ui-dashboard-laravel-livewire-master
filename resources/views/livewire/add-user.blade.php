@@ -195,17 +195,19 @@
                                                 <i class="fas fa-edit fa-lg"></i>
                                             </button>
 
-                                            <!-- Disable button -->
-                                            <button wire:click="disableUser({{ $user->id }})"
-                                                class="btn btn-sm btn-danger" title="Disable">
-                                                <i class="fas fa-ban"></i>
-                                            </button>
+
 
                                             <!-- Enable button (only if user status is inactive) -->
                                             @if ($user->status == 'inactive')
                                                 <button wire:click="enableUser({{ $user->id }})"
                                                     class="btn btn-sm btn-success" title="Enable">
                                                     <i class="fas fa-check"></i>
+                                                </button>
+                                            @else
+                                                <!-- Disable button -->
+                                                <button wire:click="disableUser({{ $user->id }})"
+                                                    class="btn btn-sm btn-danger" title="Disable">
+                                                    <i class="fas fa-ban"></i>
                                                 </button>
                                             @endif
                                         </td>

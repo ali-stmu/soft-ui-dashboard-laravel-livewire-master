@@ -71,6 +71,7 @@ class AddUser extends Component
         $this->reset(['name', 'email', 'departmentId', 'designationId', 'roleId']);
         $this->message = 'User added successfully.';
         session()->flash('message', 'User added successfully.');
+        $this->mount();
     }
     public function editUser($userId)
     {
@@ -106,6 +107,8 @@ class AddUser extends Component
         $this->reset(['name', 'email', 'departmentId', 'designationId', 'roleId', 'userIdToEdit']);
         $this->message = 'User updated successfully.';
         session()->flash('message', 'User updated successfully.');
+        $this->mount();
+
     }
 
     public function disableUser($userId)
@@ -115,6 +118,8 @@ class AddUser extends Component
         $this->message = 'User disabled successfully.';
 
         session()->flash('message', 'User disabled successfully.');
+        $this->mount();
+
     }
     public function enableUser($userId)
     {
@@ -123,5 +128,7 @@ class AddUser extends Component
         $this->message = 'User enabled successfully.';
 
         session()->flash('message', 'User enabled successfully.');
+        $this->mount();
+
     }
 }
