@@ -14,6 +14,7 @@ class FacultyTypeSeeder extends Seeder
      */
     public function run()
     {
+        $this->down();
         // Inserting academic faculty type
         FacultyType::create([
             'name' => 'Academic',
@@ -23,5 +24,9 @@ class FacultyTypeSeeder extends Seeder
         FacultyType::create([
             'name' => 'Non Academic',
         ]);
+    }
+    public function down()
+    {
+        FacultyType::truncate();
     }
 }

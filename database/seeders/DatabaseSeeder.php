@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         //     'password' => Hash::make('secret')
         // ]);
         $this->call(FacultyTypeSeeder::class);
+        $this->call(RolesTableSeeder::class);
     }
 }

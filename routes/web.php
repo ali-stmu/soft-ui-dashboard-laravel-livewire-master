@@ -13,6 +13,7 @@ use App\Http\Livewire\Tables;
 use App\Http\Livewire\AddFaculty;
 use App\Http\Livewire\AddDepartment;
 use App\Http\Livewire\AddDesignation;
+use App\Http\Livewire\AddUser;
 use App\Http\Livewire\Request\PendingRequest;
 use App\Http\Livewire\Request\MyRequest;
 use App\Http\Livewire\Request\CompletedRequest;
@@ -56,6 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/add-faculty', AddFaculty::class)->name('add-faculty');
     Route::get('/add-department', AddDepartment::class)->name('add-department');
     Route::get('/add-designation', AddDesignation::class)->name('add-designation');
+    Route::get('/add-user', AddUser::class)->name('add-user');
     Route::get('/pending-request', PendingRequest::class)->name('pending-request');
     Route::get('/my-request', MyRequest::class)->name('my-request');
     Route::get('/completed-request', CompletedRequest::class)->name('completed-request');

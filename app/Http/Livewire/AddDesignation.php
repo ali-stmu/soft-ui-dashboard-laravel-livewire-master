@@ -32,10 +32,10 @@ class AddDesignation extends Component
             $designation = Designation::findOrFail($this->designationId);
             $designation->update([
                 'name' => $this->name,
-                'updated_by_id' => Auth::id(),
+                'created_by_id' => Auth::id(),
             ]);
         } else {
-            Designation::create([
+            Designation::create([ 
                 'name' => $this->name,
                 'created_by_id' => Auth::id(),
             ]);
