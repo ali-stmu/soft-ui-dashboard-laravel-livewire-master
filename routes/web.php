@@ -54,10 +54,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/billing', Billing::class)->name('billing');
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/tables', Tables::class)->name('tables');
-    Route::get('/add-faculty', AddFaculty::class)->name('add-faculty');
-    Route::get('/add-department', AddDepartment::class)->name('add-department');
-    Route::get('/add-designation', AddDesignation::class)->name('add-designation');
-    Route::get('/add-user', AddUser::class)->name('add-user');
     Route::get('/pending-request', PendingRequest::class)->name('pending-request');
     Route::get('/my-request', MyRequest::class)->name('my-request');
     Route::get('/completed-request', CompletedRequest::class)->name('completed-request');
@@ -66,4 +62,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/rtl', Rtl::class)->name('rtl');
     Route::get('/laravel-user-profile', UserProfile::class)->name('user-profile');
     Route::get('/laravel-user-management', UserManagement::class)->name('user-management');
+     // Routes accessible only to VC Office
+     Route::group(['middleware' => ['role:VC Office']], function () {
+        Route::get('/add-faculty', AddFaculty::class)->name('add-faculty');
+        Route::get('/add-department', AddDepartment::class)->name('add-department');
+        Route::get('/add-designation', AddDesignation::class)->name('add-designation');
+        Route::get('/add-user', AddUser::class)->name('add-user');
+
+        // ... other VC Office specific routes
+    });
 });
