@@ -22,6 +22,7 @@ class RolesTableSeeder extends Seeder
             'VC Office',
             'Dean Office',
             'HOD Office',
+            'HR Office',
             'Employee',
         ];
 
@@ -42,6 +43,7 @@ class RolesTableSeeder extends Seeder
             'VC Office',
             'Dean Office',
             'HOD Office',
+            'HR Office',
             'Employee',
         ])->delete();
     }
