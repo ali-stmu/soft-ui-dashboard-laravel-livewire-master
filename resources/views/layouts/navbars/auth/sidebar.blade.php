@@ -45,7 +45,7 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">User</h6>
             </li>
             <li class="nav-item">
-                @if (auth()->user()->role->name == 'VC Office')
+                @if (auth()->user()->role->name == 'VC')
                     <a class="nav-link {{ Route::currentRouteName() == 'add-user' ? 'active' : '' }}"
                         href="{{ route('add-user') }}">
                         <div
@@ -127,7 +127,7 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Example pages</h6>
             </li> --}}
             <li class="nav-item">
-                @if (auth()->user()->role->name == 'VC Office')
+                @if (auth()->user()->role->name == 'VC')
                     <a class="nav-link {{ Route::currentRouteName() == 'add-faculty' ? 'active' : '' }}"
                         href="{{ route('add-faculty') }}">
                         <div
@@ -158,7 +158,7 @@
                 @endif
             </li>
             <li class="nav-item">
-                @if (auth()->user()->role->name == 'VC Office')
+                @if (auth()->user()->role->name == 'VC')
                     <a class="nav-link {{ Route::currentRouteName() == 'add-department' ? 'active' : '' }}"
                         href="{{ route('add-department') }}">
                         <div
@@ -189,7 +189,7 @@
                 @endif
             </li>
             <li class="nav-item">
-                @if (auth()->user()->role->name == 'VC Office')
+                @if (auth()->user()->role->name == 'VC')
                     <a class="nav-link {{ Route::currentRouteName() == 'add-designation' ? 'active' : '' }}"
                         href="{{ route('add-designation') }}">
                         <div

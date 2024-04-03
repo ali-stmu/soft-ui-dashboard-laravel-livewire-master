@@ -62,13 +62,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/rtl', Rtl::class)->name('rtl');
     Route::get('/laravel-user-profile', UserProfile::class)->name('user-profile');
     Route::get('/laravel-user-management', UserManagement::class)->name('user-management');
-     // Routes accessible only to VC Office
-     Route::group(['middleware' => ['role:VC Office']], function () {
+     // Routes accessible only to VC
+     Route::group(['middleware' => ['role:VC']], function () {
         Route::get('/add-faculty', AddFaculty::class)->name('add-faculty');
         Route::get('/add-department', AddDepartment::class)->name('add-department');
         Route::get('/add-designation', AddDesignation::class)->name('add-designation');
         Route::get('/add-user', AddUser::class)->name('add-user');
 
-        // ... other VC Office specific routes
+        // ... other VC specific routes
     });
 });

@@ -19,11 +19,15 @@ class RolesTableSeeder extends Seeder
     {
         $this->down();
         $roles = [
-            'VC Office',
-            'Dean Office',
-            'HOD Office',
-            'HR Office',
+            'VC',
+            'PS/Coordinator',
+            'Dean',
+            'HOD',
+            'Registrar',
+            'Assistant Registrar',
+            'HR',
             'Employee',
+            'Dispatcher',
         ];
 
         foreach ($roles as $role) {
@@ -40,11 +44,15 @@ class RolesTableSeeder extends Seeder
     public function down()
     {
         Role::whereIn('name', [
-            'VC Office',
-            'Dean Office',
-            'HOD Office',
-            'HR Office',
+            'VC',
+            'PS/Coordinator',
+            'Dean',
+            'HOD',
+            'Registrar',
+            'Assistant Registrar',
+            'HR',
             'Employee',
+            'Dispatcher',
         ])->delete();
     }
 }
