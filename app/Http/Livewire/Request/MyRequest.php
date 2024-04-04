@@ -94,6 +94,7 @@ class MyRequest extends Component
             'document_id' => $document->id,
             'assigned_by_id' => Auth::id(),
             'created_by_id' => Auth::id(),
+            'assigned_id' =>$document->user_id,
             // Add other fields as needed
         ];
     
