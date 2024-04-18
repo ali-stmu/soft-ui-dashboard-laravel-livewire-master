@@ -28,7 +28,7 @@
                 </div>
                 <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
                     <div class="nav-wrapper position-relative end-0">
-                        <ul class="nav nav-pills nav-fill p-1 bg-transparent" role="tablist">
+                        {{-- <ul class="nav nav-pills nav-fill p-1 bg-transparent" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link mb-0 px-0 py-1 active " data-bs-toggle="tab" href="javascript:;"
                                     role="tab" aria-controls="overview" aria-selected="true">
@@ -119,7 +119,7 @@
                                     <span class="ms-1">{{ __('Projects') }}</span>
                                 </a>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </div>
                 </div>
             </div>
@@ -134,8 +134,8 @@
             <div class="card-body pt-4 p-3">
 
                 @if ($showDemoNotification)
-                    <div wire:model="showDemoNotification"
-                        class="mt-3  alert alert-primary alert-dismissible fade show" role="alert">
+                    <div wire:model="showDemoNotification" class="mt-3  alert alert-primary alert-dismissible fade show"
+                        role="alert">
                         <span class="alert-text text-white">
                             {{ __('You are in a demo version, you can\'t update the profile.') }}</span>
                         <button wire:click="$set('showDemoNotification', false)" type="button" class="btn-close"
@@ -162,7 +162,7 @@
                             <div class="form-group">
                                 <label for="user-name" class="form-control-label">{{ __('Full Name') }}</label>
                                 <div class="@error('user.name')border border-danger rounded-3 @enderror">
-                                    <input wire:model="user.name" class="form-control" type="text"
+                                    <input readonly wire:model="user.name" class="form-control" type="text"
                                         placeholder="Name" id="user-name">
                                 </div>
                                 @error('user.name')
@@ -174,7 +174,7 @@
                             <div class="form-group">
                                 <label for="user-email" class="form-control-label">{{ __('Email') }}</label>
                                 <div class="@error('user.email')border border-danger rounded-3 @enderror">
-                                    <input wire:model="user.email" class="form-control" type="email"
+                                    <input readonly wire:model="user.email" class="form-control" type="email"
                                         placeholder="@example.com" id="user-email">
                                 </div>
                                 @error('user.email')
@@ -183,7 +183,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="user.phone" class="form-control-label">{{ __('Phone') }}</label>
@@ -222,7 +222,7 @@
                     <div class="d-flex justify-content-end">
                         <button type="submit"
                             class="btn bg-gradient-dark btn-md mt-4 mb-4">{{ 'Save Changes' }}</button>
-                    </div>
+                    </div> --}}
                 </form>
 
             </div>
