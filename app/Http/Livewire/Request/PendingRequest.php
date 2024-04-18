@@ -12,7 +12,9 @@ class PendingRequest extends Component
     public $requestes;
     public $selectedRequestId = -1;
     public $remarks;
+    public $rejectremarks;
     public $returnForwardDate;
+    public $rejectreturnForwardDate;
 
     public function render()
     {
@@ -31,11 +33,38 @@ class PendingRequest extends Component
         $this->emit('showApproveModal'); // Emit event to show the modal
 
     }
-
-    public function rejectRequest($requestId)
+    public function returnWithoutSignature($requestId)
     {
-        // Implement logic to reject the request
+        $this->selectedRequestId = $requestId;
+        $this->emit('showReturnWithoutSignatureModal'); // Emit event to show the modal
+
     }
+
+
+    public function rejectRequest()
+    {
+        $request = ApprovalRequest::findOrFail($this->selectedRequestId);
+    
+        // Update the approval request
+        $request->update([
+            'remarks' => $this->rejectremarks,
+            'signed_date' => $this->rejectreturnForwardDate,
+            'status' => 'rejected',
+        ]);
+    
+        // Reset variables
+            $document = Document::where('id', $request->document_id)->first();
+        if ($document) {
+            $document->update([
+                'approved_date' => $this->rejectreturnForwardDate,
+                // You may need to adjust this based on your Document model structure
+            ]);
+        }
+        $this->reset(['rejectremarks', 'rejectreturnForwardDate']);    
+        // Close the modal
+        $this->dispatchBrowserEvent('closeModal');
+    }
+    
 
     public function confirmApprove()
 {

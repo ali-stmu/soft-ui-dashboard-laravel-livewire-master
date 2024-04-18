@@ -39,9 +39,9 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li><a class="dropdown-item" wire:click="approveRequest({{ $request->id }})">
-                                        Approve with Signature</a></li>
+                                        Return with Signature</a></li>
                                 <li><a class="dropdown-item"
-                                        wire:click="approveRequestWithoutSignature({{ $request->id }})">Approve
+                                        wire:click="returnWithoutSignature({{ $request->id }})">Return
                                         without Signature</a></li>
                                 <li><a class="dropdown-item" wire:click="forwardRequest({{ $request->id }})">Forward
                                         with Signature</a></li>
@@ -61,7 +61,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="approveConfirmationModalLabel">Confirm Approval</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close-black" data-bs-dismiss="modal" aria-label="Close">X</button>
                 </div>
                 <div class="modal-body">
                     <form>
@@ -86,6 +86,37 @@
         </div>
     </div>
 
+    <div class="modal fade" id="showReturnWithoutSignatureModal" tabindex="-1"
+        aria-labelledby="approveConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="approveConfirmationModalLabel">Confirm Approval Without Signature</h5>
+                    <button type="button" class="btn-close-black" data-bs-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="rejectremarks" class="form-label">Remarks</label>
+                                    <input wire:model.defer="rejectremarks" type="text" class="form-control"
+                                        id="rejectremarks">
+                                </div>
+                                <div class="col">
+                                    <label for="date" class="form-label">Return/Forward Date</label>
+                                    <input wire:model.defer="rejectreturnForwardDate" type="date"
+                                        class="form-control" id="rejectreturnForwardDate">
+                                </div>
+                            </div>
+                        </div>
+                        <button wire:click="rejectRequest" type="submit" class="btn btn-primary">Confirm</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('livewire:load', function() {
             Livewire.on('showApproveModal', () => {
@@ -94,6 +125,13 @@
 
             Livewire.on('closeModal', () => {
                 $('#approveConfirmationModal').modal('hide');
+            });
+            Livewire.on('showReturnWithoutSignatureModal', () => {
+                $('#showReturnWithoutSignatureModal').modal('show');
+            });
+
+            Livewire.on('closeModal', () => {
+                $('#showReturnWithoutSignatureModal').modal('hide');
             });
         });
     </script>
