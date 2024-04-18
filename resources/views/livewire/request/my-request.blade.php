@@ -120,8 +120,6 @@
                 <th>Dispatcher</th>
                 <th>Requested To</th>
                 <th>Approved Date</th>
-                <th>Action</th>
-
             </tr>
         </thead>
         <tbody>
@@ -141,8 +139,6 @@
                     <td>{{ $document->dispatcher->name }}</td> <!-- Assuming dispatcher relation exists -->
                     <td>{{ $document->user->name }}</td> <!-- Assuming dispatcher relation exists -->
                     <td>{{ $document->approved_date ?: '--' }}</td>
-
-
                 </tr>
             @endforeach
         </tbody>
