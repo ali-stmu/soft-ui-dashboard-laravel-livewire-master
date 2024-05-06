@@ -6,7 +6,10 @@ use App\Models\ApprovalRequest;
 use App\Models\Document;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-
+use App\Models\User; // Import User model
+use App\Models\Department; // Import User model
+use App\Models\Role; // Import User model
+use Illuminate\Support\Facades\Log;
 class PendingRequest extends Component
 {
     public $requestes;
@@ -14,7 +17,15 @@ class PendingRequest extends Component
     public $remarks;
     public $rejectremarks;
     public $returnForwardDate;
+    public $forwardwithsignreturnForwardDate;
     public $rejectreturnForwardDate;
+    public $departments;
+    public $roles;    
+    public $departmentId;
+    public $roleId;
+    public $users = [];
+    public $userId;
+    public $isForwardModalOpen = false;
 
     public function render()
     {
@@ -25,7 +36,41 @@ class PendingRequest extends Component
     {
         $this->requestes = ApprovalRequest::where('assigned_id', Auth::id())
         ->where('status', 'pending')
-        ->get();    }
+        ->get();   
+        $this->departments = Department::all();
+        $this->roles = Role::whereIn('name', ['Employee', 'PS/Coordinator'])->get();
+        $this->users = User::where('role_id', $this->roleId)
+        ->where('status', 'active')
+        ->get();
+        log::debug("in mount"); 
+    }
+     public function updatedRoleId($value)
+     {
+
+        //   This method will automatically be called whenever $roleId is updated
+        //   Fetch users based on the selected role
+         $this->users = User::where('role_id', $value)
+                            ->where('department_id', $this->departmentId)
+                            ->where('status', 'active')
+                            ->get();
+        log::debug("in updatedRoleId");
+        event()->stopPropagation();
+
+ 
+
+     }
+
+     public function updatedDepartmentId($value)
+     {
+        //   This method will automatically be called whenever $roleId is updated
+        //   Fetch users based on the selected role
+         $this->users = User::where('role_id', $this->roleId)
+                            ->where('department_id', $value)
+                            ->where('status', 'active')
+                            ->get();
+        log::debug("in updatedDepartmentId");
+        event()->stopPropagation();
+    }
 
     public function approveRequest($requestId)
     {
@@ -39,7 +84,14 @@ class PendingRequest extends Component
         $this->emit('showReturnWithoutSignatureModal'); // Emit event to show the modal
 
     }
+    public function forwardRequest($requestId)
+    {
+        $this->selectedRequestId = $requestId;
+        $this->emit('forwardWithSignatureModal');
+        log::debug("in forwardRequest"); 
 
+    }
+    
 
     public function rejectRequest()
     {
