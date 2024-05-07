@@ -23,6 +23,9 @@ use App\Http\Livewire\Rtl;
 
 use App\Http\Livewire\LaravelExamples\UserProfile;
 use App\Http\Livewire\LaravelExamples\UserManagement;
+use App\Http\Livewire\Request\ForwardWithSignature;
+use App\Http\Livewire\Request\ForwardedRequests;
+use App\Http\Livewire\Request\DocumentTimeline;
 
 use Illuminate\Http\Request;
 
@@ -55,8 +58,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/tables', Tables::class)->name('tables');
     Route::get('/pending-request', PendingRequest::class)->name('pending-request');
+    Route::get('/forward-with-signature/{requestId}', ForwardWithSignature::class)->name('forward-with-signature');
+
     Route::get('/my-request', MyRequest::class)->name('my-request');
     Route::get('/completed-request', CompletedRequest::class)->name('completed-request');
+    Route::get('/forwarded-request', ForwardedRequests::class)->name('forwarded-request');
+    Route::get('/document-timeline', DocumentTimeline::class)->name('document-timeline');
     Route::get('/static-sign-in', StaticSignIn::class)->name('sign-in');
     Route::get('/static-sign-up', StaticSignUp::class)->name('static-sign-up');
     Route::get('/rtl', Rtl::class)->name('rtl');

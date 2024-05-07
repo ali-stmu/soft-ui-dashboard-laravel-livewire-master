@@ -65,7 +65,8 @@ class MyRequest extends Component
         $this->dispatchers = User::whereHas('role', function ($query) {
                                 $query->where('name', 'Dispatcher');
                             })->pluck('name', 'id');
-        $this->documents = Document::all(); // Fetch all documents
+        $this->documents = Document::where('created_by_id', auth()->id())->get(); 
+
         $this->departments = Department::all();
         $this->roles = Role::whereIn('name', ['Employee', 'PS/Coordinator'])->get();
         $this->users = User::where('role_id', $this->roleId)
