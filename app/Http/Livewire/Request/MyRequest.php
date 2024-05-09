@@ -33,7 +33,7 @@ class MyRequest extends Component
 
     protected $rules = [
         'title' => 'required|string',
-        'description' => 'required|string',
+        'description' => 'nullable|string',
         'attachment' => 'nullable|mimes:jpeg,png,gif,pdf|max:10240', // Allow jpeg, png, gif, and pdf file types up to 10MB
         'dispatch_date' => 'required|date',
         'approved_date' => 'nullable|date',

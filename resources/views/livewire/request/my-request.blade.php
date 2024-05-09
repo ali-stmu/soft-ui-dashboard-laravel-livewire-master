@@ -3,8 +3,9 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="title">{{ __('Title') }}</label>
-                    <input wire:model="title" type="text" class="form-control" id="title" placeholder="Enter title">
+                    <label for="title">{{ __('Title/Subject') }}</label>
+                    <input wire:model="title" type="text" class="form-control" id="title"
+                        placeholder="Enter title/subject">
                     @error('title')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
