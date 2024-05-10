@@ -33,10 +33,11 @@
                     <td>{{ $request->document->approved_date ?: '--' }}</td>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            <button class="btn btn-bladewindui dropdown-toggle" type="button" id="dropdownMenuButton"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 Actions
                             </button>
+
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li><a class="dropdown-item" wire:click="approveRequest({{ $request->id }})">
                                         Return with Signature</a></li>

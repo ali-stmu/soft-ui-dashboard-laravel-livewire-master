@@ -109,7 +109,7 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
+        <button type="submit" class="btn">{{ __('Submit') }}</button>
     </form>
     <table class="table">
         <thead>
