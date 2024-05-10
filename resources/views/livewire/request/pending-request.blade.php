@@ -33,8 +33,9 @@
                     <td>{{ $request->document->approved_date ?: '--' }}</td>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-bladewindui dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-bs-toggle="dropdown" aria-expanded="false">
+
+                            <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                aria-expanded="false">
                                 Actions
                             </button>
 
@@ -50,6 +51,7 @@
                                         without Signature</a></li>
                             </ul>
                         </div>
+
                     </td>
                 </tr>
             @endforeach

@@ -109,7 +109,9 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn">{{ __('Submit') }}</button>
+        <x-bladewind::button size="small" color="red" radius="small"
+            can_submit="true">{{ __('Submit') }}</x-bladewind::button>
+
     </form>
     <table class="table">
         <thead>
