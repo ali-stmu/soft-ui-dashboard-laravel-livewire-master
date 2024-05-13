@@ -62,9 +62,10 @@ class MyRequest extends Component
     public function mount()
     {
         // Fetch dispatchers from the database
-        $this->dispatchers = User::whereHas('role', function ($query) {
-                                $query->where('name', 'Dispatcher');
-                            })->pluck('name', 'id');
+        // $this->dispatchers = User::whereHas('role', function ($query) {
+        //                         $query->where('name', 'Dispatcher');
+        //                     })->pluck('name', 'id');
+        $this->dispatchers = User::pluck('name', 'id');
         $this->documents = Document::where('created_by_id', auth()->id())->get(); 
 
         $this->departments = Department::all();

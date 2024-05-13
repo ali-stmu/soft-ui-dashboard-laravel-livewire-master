@@ -109,7 +109,8 @@
                 </div>
             </div>
         </div>
-        <x-bladewind::button size="small" color="red" radius="small"
+
+        <x-bladewind::button outline="true" color="red" radius="small"
             can_submit="true">{{ __('Submit') }}</x-bladewind::button>
 
     </form>

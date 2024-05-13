@@ -82,8 +82,9 @@
                                     <label class="form-check-label" for="rememberMe">{{ __('Remember me') }}</label>
                                 </div>
                                 <div class="text-center">
-                                    <button type="submit"
-                                        class="btn bg-gradient-info w-100 mt-4 mb-0">{{ __('Sign in') }}</button>
+                                    <x-bladewind::button class="mx-auto block" color="red" radius="small"
+                                        can_submit="true">{{ __('Sign in') }}</x-bladewind::button>
+
                                 </div>
                             </form>
                         </div>

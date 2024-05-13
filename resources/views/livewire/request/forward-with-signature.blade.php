@@ -8,7 +8,7 @@
                     <div class="mb-3">
                         <div class="row">
                             <div class="col">
-                                <label for="forwardwithsignremarks" class="form-label">Remarks</label>
+                                <label for="forwardwithsignremarks">Remarks</label>
                                 <input wire:model.defer="forwardwithsignremarks" type="text" class="form-control"
                                     id="forwardwithsignremarks">
                                 @error('forwardwithsignremarks')
@@ -16,7 +16,7 @@
                                 @enderror
                             </div>
                             <div class="col">
-                                <label for="date" class="form-label">Return/Forward Date</label>
+                                <label for="date">Return/Forward Date</label>
                                 <input wire:model.defer="forwardwithsignreturnForwardDate" type="date"
                                     class="form-control" id="forwardwithsignreturnForwardDate">
                                 @error('forwardwithsignreturnForwardDate')
@@ -75,7 +75,17 @@
                             </div>
                         </div>
                     </div>
-                    <button wire:click="forwardwithsignRequest" type="submit" class="btn btn-primary">Confirm</button>
+                    <x-bladewind::button type="submit" outline="true" color="red" text="white"
+                        wire:click="forwardwithsignRequest">
+                        Confirm
+                    </x-bladewind::button>
+
+
+
+
+                    {{-- <x-bladewind::button color="red" radius="small"
+                        can_submit="true">{{ __('Sign in') }}</x-bladewind::button>
+                    <button wire:click="forwardwithsignRequest" type="submit" class="btn btn-primary">Confirm</button> --}}
                 </form>
             </div>
         </div>
