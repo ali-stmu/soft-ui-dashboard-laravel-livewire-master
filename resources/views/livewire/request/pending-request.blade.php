@@ -15,12 +15,17 @@
             </thead>
             <tbody>
                 @foreach ($requestes as $request)
-                    <tr>
+                    @php
+                        // Calculate the difference in days between the current date and the request's creation date
+                        $differenceInDays = now()->diffInDays($request->created_at);
+                    @endphp
+                    <tr style="{{ $differenceInDays > 3 ? 'color: red;' : '' }}">
                         <td>
-                            <a href="#" class="document-title" data-toggle="modal"
+                            <button wire:click="getAllApprovalRequests({{ $request->document->id }})"
+                                class="document-title" data-toggle="modal"
                                 data-target="#documentDetailsModal{{ $request->id }}">
                                 {{ $request->document->title }}
-                            </a>
+                            </button>
                         </td>
                         <td>{{ $request->document->description }}</td>
                         <td>
@@ -72,11 +77,80 @@
                                     <button type="button" class="btn-close" data-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body"> <!-- Modified line -->
                                     <!-- Display document details here -->
-                                    <p>Title: {{ $request->document->title }}</p>
-                                    <p>Description: {{ $request->document->description }}</p>
-                                    <!-- Add more details as needed -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <x-bladewind::timeline-group align_left="true" position="left"
+                                                anchor="big" stacked="true">
+
+                                                @foreach ($documentTimeline as $key => $documentData)
+                                                    @php
+                                                        // Generate a random color for each document
+                                                        $colors = ['orange', 'green', 'purple', 'gray', 'pink', 'blue'];
+                                                        $randomColor = $colors[array_rand($colors)];
+                                                    @endphp
+                                                    <x-bladewind::timeline-group color="{{ $randomColor }}">
+                                                        <x-bladewind::timeline
+                                                            date="{{ $documentData['document']['created_at']->diffForHumans() }}">
+                                                            <x-slot:content>
+                                                                <ul>
+                                                                    <li>
+                                                                        <strong>Title:</strong>
+                                                                        {{ $documentData['document']['title'] }}
+                                                                    </li>
+
+                                                                    <li><strong>Description:</strong>
+                                                                        {{ $documentData['document']['description'] }}
+                                                                    </li>
+                                                                    <li><strong>Initiated By:</strong>
+                                                                        {{ $documentData['document']['initiator'] }}
+                                                                    </li>
+                                                                    <hr>
+                                                                    <x-bladewind::timeline-group>
+                                                                        @foreach ($documentData['approvalRequests'] as $approvalRequest)
+                                                                            <x-bladewind::timeline
+                                                                                date="{{ $approvalRequest['created_at']->diffForHumans() }}">
+                                                                                <x-slot:content>
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-1">
+                                                                                            <strong
+                                                                                                class="index-number">{{ $loop->iteration }}</strong>
+                                                                                        </div>
+                                                                                        <div class="col-md-5">
+                                                                                            <strong>Assigned
+                                                                                                By:</strong>
+                                                                                            {{ $approvalRequest['assignedBy'] }}<br>
+                                                                                            <strong>Assigned
+                                                                                                To:</strong>
+                                                                                            {{ $approvalRequest['assignedTo'] }}
+                                                                                        </div>
+                                                                                        <div class="col-md-6">
+                                                                                            <strong>Status:</strong>
+                                                                                            @if ($approvalRequest['status'] === 'finalapproved')
+                                                                                                Forwarded
+                                                                                            @else
+                                                                                                {{ $approvalRequest['status'] }}
+                                                                                            @endif
+                                                                                            <br>
+                                                                                            <strong>Signed
+                                                                                                Date:</strong>
+                                                                                            {{ $approvalRequest['signedDate'] }}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </x-slot:content>
+                                                                            </x-bladewind::timeline>
+                                                                            <hr>
+                                                                        @endforeach
+                                                                    </x-bladewind::timeline-group>
+                                                                </ul>
+                                                            </x-slot:content>
+                                                        </x-bladewind::timeline>
+                                                    </x-bladewind::timeline-group>
+                                                @endforeach
+                                            </x-bladewind::timeline-group>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
