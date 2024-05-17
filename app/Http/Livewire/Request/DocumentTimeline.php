@@ -53,8 +53,6 @@ class DocumentTimeline extends Component
     }
     public function render()
     {
-        return view('livewire.request.document-timeline', [
-            'documentTimeline' => $this->documentTimeline,
-        ]);
+        return view('livewire.request.document-timeline');
     }
 }
