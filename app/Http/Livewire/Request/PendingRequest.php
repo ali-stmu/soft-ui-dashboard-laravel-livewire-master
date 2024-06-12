@@ -30,6 +30,8 @@ class PendingRequest extends Component
     public $documentRequests = [];
     public $documentTimeline = [];
     private $processedDocumentIds = [];
+    public $receivingDates = []; // Add this line
+
     public function render()
     {
         return view('livewire.request.pending-request');
@@ -162,6 +164,12 @@ class PendingRequest extends Component
 
     // Close the modal
     $this->dispatchBrowserEvent('closeModal');
+}
+
+public function saveReceivingDate($requestId)
+{
+    $request = ApprovalRequest::findOrFail($requestId);
+    $request->update(['receiving_date' => $this->receivingDates[$requestId]]);
 }
 
 }

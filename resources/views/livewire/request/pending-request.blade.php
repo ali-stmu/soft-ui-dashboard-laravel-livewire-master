@@ -10,6 +10,7 @@
                     <th>Dispatch Date</th>
                     <th>Dispatcher</th>
                     <th>Approved Date</th>
+                    <th>Receiving Date</th> <!-- Added column -->
                     <th>Action</th>
                 </tr>
             </thead>
@@ -42,6 +43,15 @@
                         <td>{{ $request->document->dispatch_date }}</td>
                         <td>{{ $request->document->dispatcher->name }}</td>
                         <td>{{ $request->document->approved_date ?: '--' }}</td>
+                        @if ($request->receiving_date)
+                            <td>{{ $request->receiving_date }} </td>
+                        @else
+                            <td>
+                                <input type="date" wire:model.defer="receivingDates.{{ $request->id }}" />
+                                <button wire:click="saveReceivingDate({{ $request->id }})"
+                                    class="btn btn-success">Save</button>
+                            </td>
+                        @endif
                         <td>
                             <div class="dropdown">
 

@@ -17,6 +17,7 @@ class ApprovalRequest extends Model
         'status',
         'assigned_by_id',
         'created_by_id',
+        'receiving_date',
     ];
 
     public function document()
