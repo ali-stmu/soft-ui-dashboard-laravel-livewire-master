@@ -18,6 +18,8 @@ class ApprovalRequest extends Model
         'assigned_by_id',
         'created_by_id',
         'receiving_date',
+        'department_id',
+
     ];
 
     public function document()

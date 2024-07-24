@@ -16,6 +16,7 @@ class Department extends Model
         'type',
         'status',
         'created_by_id',
+        'department_id',
     ];
 
     public function faculty()

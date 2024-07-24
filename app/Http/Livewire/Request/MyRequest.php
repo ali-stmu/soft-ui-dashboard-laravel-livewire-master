@@ -83,6 +83,7 @@ class MyRequest extends Component
         $validatedData['user_id'] = $this->userId;
         $validatedData['dispatcher_id'] = $this->dispatcher_id; // Assign selected dispatcher_id
         $validatedData['created_by_id'] = Auth::id(); // Assign selected dispatcher_id
+        $validatedData['department_id'] = Auth::user()->department_id; // Assign department_id
 
         if ($this->attachment) {
             // Debugging
@@ -92,11 +93,13 @@ class MyRequest extends Component
         }
         
         $document = Document::create($validatedData);
+        $documentUser = User::find($document->user_id);
         $approvalRequestData = [
             'document_id' => $document->id,
             'assigned_by_id' => Auth::id(),
             'created_by_id' => Auth::id(),
             'assigned_id' =>$document->user_id,
+            'department_id' => $documentUser->department_id, // Assign department_id of the document's user
             // Add other fields as needed
         ];
     
