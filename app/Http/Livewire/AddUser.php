@@ -57,8 +57,8 @@ class AddUser extends Component
             'designationId' => 'required',
             'roleId' => 'required',
         ]);
-
-        User::create([
+    
+        $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
             'department_id' => $this->departmentId,
@@ -66,13 +66,23 @@ class AddUser extends Component
             'role_id' => $this->roleId,
             'created_by_id' => Auth::id(),
         ]);
-
+    
+        // Get the department, designation, and role information
+        $department = Department::find($this->departmentId);
+        $designation = Designation::find($this->designationId);
+        $role = Role::find($this->roleId);
+    
+        // Send welcome email
+        \Mail::to($user->email)->send(new \App\Mail\WelcomeUserMail($user, $department, $designation, $role));
+    
         // Clear input fields after submission
         $this->reset(['name', 'email', 'departmentId', 'designationId', 'roleId']);
         $this->message = 'User added successfully.';
         session()->flash('message', 'User added successfully.');
         $this->mount();
     }
+    
+    
     public function editUser($userId)
     {
         $user = User::findOrFail($userId);
@@ -85,50 +95,78 @@ class AddUser extends Component
     }
 
     public function updateUser()
-    {
-        $this->validate([
-            'name' => 'required|string',
-            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->userIdToEdit)],
-            'departmentId' => 'required',
-            'designationId' => 'required',
-            'roleId' => 'required',
-        ]);
+{
+    $this->validate([
+        'name' => 'required|string',
+        'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->userIdToEdit)],
+        'departmentId' => 'required',
+        'designationId' => 'required',
+        'roleId' => 'required',
+    ]);
 
-        $user = User::findOrFail($this->userIdToEdit);
-        $user->update([
-            'name' => $this->name,
-            'email' => $this->email,
-            'department_id' => $this->departmentId,
-            'designation_id' => $this->designationId,
-            'role_id' => $this->roleId,
-        ]);
+    $user = User::findOrFail($this->userIdToEdit);
+    $changes = [];
 
-        // Clear input fields after submission
-        $this->reset(['name', 'email', 'departmentId', 'designationId', 'roleId', 'userIdToEdit']);
-        $this->message = 'User updated successfully.';
-        session()->flash('message', 'User updated successfully.');
-        $this->mount();
-
+    // Check for changes and store old and new values
+    if ($user->name !== $this->name) {
+        $changes['name'] = ['old' => $user->name, 'new' => $this->name];
+    }
+    if ($user->email !== $this->email) {
+        $changes['email'] = ['old' => $user->email, 'new' => $this->email];
+    }
+    if ($user->department_id !== $this->departmentId) {
+        $changes['department'] = ['old' => Department::find($user->department_id)->name, 'new' => Department::find($this->departmentId)->name];
+    }
+    if ($user->designation_id !== $this->designationId) {
+        $changes['designation'] = ['old' => Designation::find($user->designation_id)->name, 'new' => Designation::find($this->designationId)->name];
+    }
+    if ($user->role_id !== $this->roleId) {
+        $changes['role'] = ['old' => Role::find($user->role_id)->name, 'new' => Role::find($this->roleId)->name];
     }
 
-    public function disableUser($userId)
-    {
-        $user = User::findOrFail($userId);
-        $user->update(['status' => 'inactive']);
-        $this->message = 'User disabled successfully.';
+    $user->update([
+        'name' => $this->name,
+        'email' => $this->email,
+        'department_id' => $this->departmentId,
+        'designation_id' => $this->designationId,
+        'role_id' => $this->roleId,
+    ]);
 
-        session()->flash('message', 'User disabled successfully.');
-        $this->mount();
+    // Send edit notification email
+    \Mail::to($user->email)->send(new \App\Mail\UserEditNotification($user, $changes));
 
-    }
-    public function enableUser($userId)
-    {
-        $user = User::findOrFail($userId);
-        $user->update(['status' => 'active']);
-        $this->message = 'User enabled successfully.';
+    // Clear input fields after submission
+    $this->reset(['name', 'email', 'departmentId', 'designationId', 'roleId', 'userIdToEdit']);
+    $this->message = 'User updated successfully.';
+    session()->flash('message', 'User updated successfully.');
+    $this->mount();
+}
 
-        session()->flash('message', 'User enabled successfully.');
-        $this->mount();
 
-    }
+public function disableUser($userId)
+{
+    $user = User::findOrFail($userId);
+    $user->update(['status' => 'inactive']);
+    $this->message = 'User disabled successfully.';
+
+    // Send disable notification email
+    \Mail::to($user->email)->send(new \App\Mail\UserDisableNotification($user));
+
+    session()->flash('message', 'User disabled successfully.');
+    $this->mount();
+}
+
+public function enableUser($userId)
+{
+    $user = User::findOrFail($userId);
+    $user->update(['status' => 'active']);
+    $this->message = 'User enabled successfully.';
+
+    // Send enable notification email
+    \Mail::to($user->email)->send(new \App\Mail\UserEnableNotification($user));
+
+    session()->flash('message', 'User enabled successfully.');
+    $this->mount();
+}
+
 }
