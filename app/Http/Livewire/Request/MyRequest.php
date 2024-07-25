@@ -79,36 +79,44 @@ class MyRequest extends Component
     public function save()
     {
         $validatedData = $this->validate();
-
+    
         $validatedData['user_id'] = $this->userId;
-        $validatedData['dispatcher_id'] = $this->dispatcher_id; // Assign selected dispatcher_id
-        $validatedData['created_by_id'] = Auth::id(); // Assign selected dispatcher_id
-        $validatedData['department_id'] = Auth::user()->department_id; // Assign department_id
-
+        $validatedData['dispatcher_id'] = $this->dispatcher_id;
+        $validatedData['created_by_id'] = Auth::id();
+        $validatedData['department_id'] = Auth::user()->department_id;
+    
         if ($this->attachment) {
-            // Debugging
-            //dd($this->attachment); // Check if attachment object is received
-        
-            $validatedData['attachment'] = $this->attachment->store('attachments', 'public'); // Store attachment in public disk under the 'attachments' directory
+            $validatedData['attachment'] = $this->attachment->store('attachments', 'public');
         }
-        
+    
         $document = Document::create($validatedData);
         $documentUser = User::find($document->user_id);
         $approvalRequestData = [
             'document_id' => $document->id,
             'assigned_by_id' => Auth::id(),
             'created_by_id' => Auth::id(),
-            'assigned_id' =>$document->user_id,
-            'department_id' => $documentUser->department_id, // Assign department_id of the document's user
-            // Add other fields as needed
+            'assigned_id' => $document->user_id,
+            'department_id' => $documentUser->department_id,
         ];
     
         ApprovalRequest::create($approvalRequestData);
-
+    
+        // Fetch users for notification
+        $assignedUser = User::find($document->user_id);
+        $dispatcher = User::find($document->dispatcher_id);
+        $creator = Auth::user();
+    
+        // Send email notifications
+        \Mail::to($assignedUser->email)->send(new \App\Mail\DocumentAssignedNotification($document, $assignedUser, $creator));
+        \Mail::to($creator->email)->send(new \App\Mail\DocumentCreatedNotification($document, $creator));
+        \Mail::to($dispatcher->email)->send(new \App\Mail\DispatcherNotification($document, $dispatcher, $creator));
+    
         $this->reset();
         session()->flash('message', 'Request saved successfully.');
         $this->mount();
     }
+    
+
 
     public function render()
     {
