@@ -140,9 +140,10 @@
                         @endif
                     </td>
                     <td>{{ $document->dispatch_date }}</td>
-                    <td>{{ $document->dispatcher->name }}</td> <!-- Assuming dispatcher relation exists -->
-                    <td>{{ $document->user->name }}</td> <!-- Assuming dispatcher relation exists -->
-                    <td>{{ $document->approved_date ?: '--' }}</td>
+                    <td>{{ $document->dispatcher?->name ?? '--' }}</td>
+                    <td>{{ $document->user?->name ?? '--' }}</td> <!-- Handling null user and null user name -->
+                    <td>{{ $document->approved_date ?? '--' }}</td>
+
                 </tr>
             @endforeach
         </tbody>
