@@ -41,8 +41,10 @@
                             @endif
                         </td>
                         <td>{{ $request->document->dispatch_date }}</td>
-                        <td>{{ $request->document->dispatcher->name }}</td>
-                        <td>{{ $request->document->approved_date ?: '--' }}</td>
+                        <td>{{ $request->document->dispatcher?->name ?? 'N/A' }}</td>
+                        <!-- Handling null dispatcher and null dispatcher name -->
+                        <td>{{ $request->document->approved_date ?? '--' }}</td>
+
                         @if ($request->receiving_date)
                             <td>{{ $request->receiving_date }} </td>
                         @else
