@@ -30,6 +30,8 @@ class Kernel extends ConsoleKernel
         if (env('IS_DEMO')) {
             $schedule->command('migrate:fresh --seed')->cron($scheduledInterval);
         }
+          // Schedule the approval request alert command to run daily at midnight
+          $schedule->command('alert:approval-request')->dailyAt('00:00');
     }
 
     /**
