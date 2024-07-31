@@ -28,9 +28,9 @@
                             No attachment
                         @endif
                     </td>
-                    <td>{{ $request->document->dispatch_date }}</td>
-                    <td>{{ $request->document->dispatcher->name }}</td>
-                    <td>{{ $request->signed_date ?: '--' }}</td>
+                    <td>{{ optional($request->document)->dispatch_date ?? '--' }}</td>
+                    <td>{{ optional($request->document->dispatcher)->name ?? '--' }}</td>
+                    <td>{{ $request->signed_date ?? '--' }}</td>
 
                     </td>
                 </tr>
