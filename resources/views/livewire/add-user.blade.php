@@ -79,6 +79,12 @@
         <button wire:click="saveUser" class="btn btn-primary">Save</button>
     </div>
     <div class="row">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <input wire:model.debounce.300ms="searchTerm" type="text" class="form-control"
+                    placeholder="Search users...">
+            </div>
+        </div>
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
@@ -192,7 +198,7 @@
                                             <!-- Edit button -->
                                             <button wire:click="editUser({{ $user->id }})"
                                                 class="btn btn-sm btn-info" title="Edit">
-                                                <i class="fas fa-edit fa-lg"></i>
+                                                Edit
                                             </button>
 
 
@@ -201,13 +207,13 @@
                                             @if ($user->status == 'inactive')
                                                 <button wire:click="enableUser({{ $user->id }})"
                                                     class="btn btn-sm btn-success" title="Enable">
-                                                    <i class="fas fa-check"></i>
+                                                    Enable
                                                 </button>
                                             @else
                                                 <!-- Disable button -->
                                                 <button wire:click="disableUser({{ $user->id }})"
                                                     class="btn btn-sm btn-danger" title="Disable">
-                                                    <i class="fas fa-ban"></i>
+                                                    Disable
                                                 </button>
                                             @endif
                                         </td>
@@ -216,9 +222,20 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="d-flex justify-content-center mt-4">
+                            {{ $users->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('livewire:load', function() {
+            Livewire.on('userStatusChanged', () => {
+                location.reload();
+            });
+        });
+    </script>
+
 </div>

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
+use Livewire\WithPagination;
 
 use App\Models\Department;
 use App\Models\Designation;
@@ -9,6 +10,7 @@ use App\Models\Role;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule; // Correct import for Rule class
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -24,19 +26,44 @@ class AddUser extends Component
     public $designations;
     public $departments;
     public $roles;
-    public $users;
+    public $searchTerm;
+
+    protected $users;
 
     public function mount()
     {
         $this->departments = Department::all();
         $this->designations = Designation::all();
         $this->roles = Role::all();
-        $this->users = User::orderByRaw("CASE WHEN status = 'active' THEN 1 ELSE 2 END")->get();
     }
+    public function updatingSearchTerm()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
+        $searchTerm = '%' . $this->searchTerm . '%';
 
-        return view('livewire.add-user');
+        $this->users = User::where(function($query) use ($searchTerm) {
+                $query->where('name', 'like', $searchTerm)
+                      ->orWhere('email', 'like', $searchTerm)
+                      ->orWhereHas('department', function($q) use ($searchTerm) {
+                          $q->where('name', 'like', $searchTerm);
+                      })
+                      ->orWhereHas('designation', function($q) use ($searchTerm) {
+                          $q->where('name', 'like', $searchTerm);
+                      })
+                      ->orWhereHas('role', function($q) use ($searchTerm) {
+                          $q->where('name', 'like', $searchTerm);
+                      });
+            })
+            ->orderByRaw("CASE WHEN status = 'active' THEN 1 ELSE 2 END")
+            ->paginate(5);
+
+        return view('livewire.add-user', [
+            'users' => $this->users,
+        ]);
     }
     public function saveUser()
     {
@@ -153,7 +180,9 @@ public function disableUser($userId)
     \Mail::to($user->email)->send(new \App\Mail\UserDisableNotification($user));
 
     session()->flash('message', 'User disabled successfully.');
-    $this->mount();
+    
+    // Emit event to refresh page
+    $this->emit('userStatusChanged');
 }
 
 public function enableUser($userId)
@@ -166,7 +195,10 @@ public function enableUser($userId)
     \Mail::to($user->email)->send(new \App\Mail\UserEnableNotification($user));
 
     session()->flash('message', 'User enabled successfully.');
-    $this->mount();
+
+    // Emit event to refresh page
+    $this->emit('userStatusChanged');
 }
+
 
 }
