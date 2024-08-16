@@ -1,6 +1,5 @@
 <div>
     <div>
-
         <div class="col">
             <div class="form-group">
                 <label for="designation-name" class="form-control-label">Designation Name</label>
@@ -12,8 +11,15 @@
             </div>
         </div>
         <button wire:click="save" class="btn btn-primary">Save</button>
-
     </div>
+
+    <div class="row mt-4">
+        <div class="col-6">
+            <input wire:model.debounce.300ms="search" type="text" class="form-control"
+                placeholder="Search Designations">
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
@@ -30,8 +36,8 @@
                                     </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Created/Updated By</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Time
-                                        Stamp</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Time Stamp</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Actions
                                     </th>
@@ -73,11 +79,13 @@
                                                 </div>
                                             </div>
                                         </td>
-
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="mt-3">
+                            {{ $designations->links() }} <!-- Pagination links -->
+                        </div>
                     </div>
                 </div>
             </div>

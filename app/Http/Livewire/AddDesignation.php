@@ -1,18 +1,19 @@
 <?php
 
-// Livewire Component - AddDesignation.php
-// Livewire Component - AddDesignation.php
-
 namespace App\Http\Livewire;
 
 use App\Models\Designation;
 use Livewire\Component;
+use Livewire\WithPagination; // Import the pagination trait
 use Illuminate\Support\Facades\Auth;
 
 class AddDesignation extends Component
 {
+    use WithPagination; // Use pagination
+
     public $name;
-    public $designationId; // For storing the ID of the designation being edited
+    public $designationId;
+    public $search = ''; // For search functionality
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -20,7 +21,10 @@ class AddDesignation extends Component
 
     public function render()
     {
-        $designations = Designation::latest()->get(); // Fetch all designations
+        $designations = Designation::where('name', 'like', '%' . $this->search . '%')
+            ->latest()
+            ->paginate(5); // Pagination with 5 items per page
+
         return view('livewire.add-designation', compact('designations'));
     }
 
@@ -35,7 +39,7 @@ class AddDesignation extends Component
                 'created_by_id' => Auth::id(),
             ]);
         } else {
-            Designation::create([ 
+            Designation::create([
                 'name' => $this->name,
                 'created_by_id' => Auth::id(),
             ]);
