@@ -4,19 +4,27 @@ namespace App\Http\Livewire;
 
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\Faculty;
 
 class AddFaculty extends Component
 {
+    use WithPagination;
+
     public $name;
     public $location;
-    public $faculties;
+    public $search = '';  // Search query
     public $editingFacultyId = null;
 
     protected $rules = [
         'name' => 'required|string|max:255',
         'location' => 'required|string|max:255',
     ];
+
+    public function updatingSearch()
+    {
+        $this->resetPage(); // Reset pagination when search changes
+    }
 
     public function save()
     {
@@ -29,29 +37,15 @@ class AddFaculty extends Component
         }
 
         $this->resetForm();
-        $this->loadFaculty();
     }
 
     public function create()
     {
-        // Create a new faculty record
         Faculty::create([
             'name' => $this->name,
             'location' => $this->location,
             'created_by_id' => Auth::id(),
         ]);
-    }
-
-    public function mount()
-    {
-        // Fetch all faculty records from the database during component initialization
-        $this->loadFaculty();
-    }
-
-    public function loadFaculty()
-    {
-        // Load faculty records from the database and assign them to the faculties property
-        $this->faculties = Faculty::all();
     }
 
     public function edit($facultyId)
@@ -66,7 +60,6 @@ class AddFaculty extends Component
     {
         $this->validate();
 
-        // Update the faculty record
         $faculty = Faculty::findOrFail($this->editingFacultyId);
         $faculty->update([
             'name' => $this->name,
@@ -78,25 +71,26 @@ class AddFaculty extends Component
 
     public function delete($facultyId)
     {
-        // Delete the faculty record
         Faculty::findOrFail($facultyId)->delete();
 
-        // Optionally, you can add a message to indicate successful deletion
         session()->flash('message', 'Faculty deleted successfully!');
-
-        $this->loadFaculty();
     }
 
     public function render()
     {
-        // Fetch all faculty records from the database
+        $faculties = Faculty::where('name', 'like', '%' . $this->search . '%')
+            ->orWhere('location', 'like', '%' . $this->search . '%')
+            ->paginate(5);
 
-        return view('livewire.add-faculty');
+        return view('livewire.add-faculty', [
+            'faculties' => $faculties,
+        ]);
     }
 
     private function resetForm()
     {
         $this->name = '';
         $this->location = '';
+        $this->editingFacultyId = null;
     }
 }

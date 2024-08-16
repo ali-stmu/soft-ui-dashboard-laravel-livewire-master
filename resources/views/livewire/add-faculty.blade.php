@@ -1,5 +1,3 @@
-<!-- livewire/add-faculty.blade.php -->
-
 <div>
     <p>Add Faculty</p>
     <form role="form text-left">
@@ -26,10 +24,18 @@
             </div>
         </div>
         <div class="d-flex justify-content-center">
-            <button wire:click="save" class="btn bg-gradient-dark btn-md mt-4 mb-4">{{ __('Save') }}</button>
+            <button wire:click.prevent="save" class="btn bg-gradient-dark btn-md mt-4 mb-4">{{ __('Save') }}</button>
         </div>
     </form>
 
+    <!-- Search Input -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <input wire:model="search" type="text" class="form-control" placeholder="Search faculties...">
+        </div>
+    </div>
+
+    <!-- Faculty Table -->
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
@@ -45,21 +51,16 @@
                                     </th>
                                     <th
                                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                        Location
-                                    </th>
+                                        Location</th>
                                     <th
                                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                        Created/Updated By
-                                    </th>
-
+                                        Created/Updated By</th>
                                     <th
                                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                        Time Stamp
-                                    </th>
+                                        Time Stamp</th>
                                     <th
                                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                        Actions
-                                    </th>
+                                        Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -112,9 +113,14 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <!-- Pagination Links -->
+                        <div class="d-flex justify-content-center mt-3">
+                            {{ $faculties->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
