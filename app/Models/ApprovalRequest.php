@@ -19,6 +19,7 @@ class ApprovalRequest extends Model
         'created_by_id',
         'receiving_date',
         'department_id',
+        'alert_sent_at',
 
     ];
 

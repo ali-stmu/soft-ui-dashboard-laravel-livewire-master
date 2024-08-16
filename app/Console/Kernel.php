@@ -31,7 +31,9 @@ class Kernel extends ConsoleKernel
             $schedule->command('migrate:fresh --seed')->cron($scheduledInterval);
         }
           // Schedule the approval request alert command to run daily at midnight
-          $schedule->command('alert:approval-request')->dailyAt('00:00');
+          if (env('ENABLE_ALERT_REQUEST', false)) {
+            $schedule->command('alert:approval-request')->weekly()->timezone('GMT+5')->at('08:00');
+        }
     }
 
     /**
