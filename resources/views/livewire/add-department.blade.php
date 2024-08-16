@@ -1,7 +1,7 @@
 <div>
     <div>
         <div class="row">
-            <div class = "col">
+            <div class="col">
                 <div class="form-group">
                     <label for="department-name" class="form-control-label">Department Name</label>
                     <input wire:model="name" class="form-control @error('name') border border-danger @enderror"
@@ -11,7 +11,7 @@
                     @enderror
                 </div>
             </div>
-            <div class = "col">
+            <div class="col">
                 <div class="form-group">
                     <label for="type-id" class="form-control-label">Type</label>
                     <select wire:model="typeId" class="form-control @error('typeId') border border-danger @enderror"
@@ -44,6 +44,14 @@
 
         <button wire:click="saveDepartment" class="btn btn-primary">Save Department</button>
     </div>
+
+    <div class="row mt-4">
+        <div class="col-6">
+            <input wire:model.debounce.300ms="search" type="text" class="form-control"
+                placeholder="Search Departments">
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
@@ -70,7 +78,6 @@
                                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Created/Updated By
                                     </th>
-
                                     <th
                                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Time Stamp
@@ -82,7 +89,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($Department as $department)
+                                @foreach ($departments as $department)
                                     <tr>
                                         <td>
                                             <div class="d-flex px-2">
@@ -108,8 +115,7 @@
                                         <td>
                                             <div class="d-flex px-2">
                                                 <div class="my-auto">
-                                                    <h6 class="mb-0 text-sm">{{ $department->createdBy->name }}
-                                                    </h6>
+                                                    <h6 class="mb-0 text-sm">{{ $department->createdBy->name }}</h6>
                                                 </div>
                                             </div>
                                         </td>
@@ -140,10 +146,12 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="mt-3">
+                            {{ $departments->links() }} <!-- Pagination links -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
