@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class AddDepartment extends Component
 {
     use WithPagination; // Use pagination
+    protected $paginationTheme = 'bootstrap'; // Optional, if you want Bootstrap-styled pagination
 
     public $name;
     public $typeId;

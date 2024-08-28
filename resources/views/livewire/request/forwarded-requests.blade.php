@@ -1,4 +1,11 @@
 <div>
+    <div class="row mb-4">
+        <div class="col">
+            <input type="text" wire:model="searchTerm" class="form-control"
+                placeholder="Search by title or description...">
+        </div>
+    </div>
+
     <table class="table">
         <thead>
             <tr>
@@ -11,7 +18,6 @@
                 <th>Dispatch Date</th>
                 <th>Dispatcher</th>
                 <th>Forwarded Date</th>
-
             </tr>
         </thead>
         <tbody>
@@ -19,14 +25,9 @@
                 <tr>
                     <td>{{ $request->document->title }}</td>
                     <td>{{ $request->document->description }}</td>
-                    <td>
-                        {{ $request->createdBy->name }}
-                    </td>
-                    <td>
-                        {{ $request->assignedBy->name }}
-                    </td>
+                    <td>{{ $request->createdBy->name }}</td>
+                    <td>{{ $request->assignedBy->name }}</td>
                     <td>{{ $request->assignedTo->name }}</td>
-
                     <td>
                         @if ($request->document->attachment)
                             <a href="{{ asset('storage/' . $request->document->attachment) }}" target="_blank">View
@@ -43,5 +44,8 @@
         </tbody>
     </table>
 
-
+    <!-- Pagination Links -->
+    <div class="d-flex justify-content-center">
+        {{ $requestes->links() }}
+    </div>
 </div>

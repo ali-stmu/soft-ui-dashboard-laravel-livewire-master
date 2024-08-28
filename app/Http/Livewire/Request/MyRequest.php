@@ -11,25 +11,17 @@ use App\Models\Role; // Import User model
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
+use Livewire\WithPagination;
+
 
 class MyRequest extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, WithPagination;
+    protected $paginationTheme = 'bootstrap'; // Optional, if you want Bootstrap-styled pagination
 
-    public $title;
-    public $description;
-    public $attachment;
-    public $dispatch_date;
-    public $approved_date;
-    public $dispatcher_id; // Add dispatcher_id property
-    public $dispatchers; // Property to store dispatchers
-    public $documents;
-    public $departments;
-    public $roles;    
-    public $departmentId;
-    public $roleId;
-    public $users = [];
-    public $userId;
+    public $title, $description, $attachment, $dispatch_date, $approved_date, $dispatcher_id;
+    public $dispatchers, $departments, $roles;
+    public $departmentId, $roleId, $users = [], $userId, $search = '';
 
     protected $rules = [
         'title' => 'required|string',
@@ -61,19 +53,9 @@ class MyRequest extends Component
     
     public function mount()
     {
-        // Fetch dispatchers from the database
-        // $this->dispatchers = User::whereHas('role', function ($query) {
-        //                         $query->where('name', 'Dispatcher');
-        //                     })->pluck('name', 'id');
         $this->dispatchers = User::pluck('name', 'id');
-        $this->documents = Document::where('created_by_id', auth()->id())->get(); 
-
         $this->departments = Department::all();
         $this->roles = Role::whereIn('name', ['Employee', 'PS/Coordinator'])->get();
-        $this->users = User::where('role_id', $this->roleId)
-        ->where('status', 'active')
-        ->get();
-
     }
 
     public function save()
@@ -107,7 +89,7 @@ class MyRequest extends Component
         $creator = Auth::user();
     
         // Send email notifications
-        \Mail::to($assignedUser->email)->send(new \App\Mail\DocumentAssignedNotification($document, $assignedUser, $creator));
+        \Mail::to($assignedUser->email)->cc([$dispatcher->email, $creator->email])->send(new \App\Mail\DocumentAssignedNotification($document, $assignedUser, $creator));
         \Mail::to($creator->email)->send(new \App\Mail\DocumentCreatedNotification($document, $creator));
         \Mail::to($dispatcher->email)->send(new \App\Mail\DispatcherNotification($document, $dispatcher, $creator));
     
@@ -120,6 +102,17 @@ class MyRequest extends Component
 
     public function render()
     {
-        return view('livewire.request.my-request');
+        $searchTerm = '%' . $this->search . '%';
+
+        $documents = Document::where('created_by_id', auth()->id())
+            ->where(function ($query) use ($searchTerm) {
+                $query->where('title', 'like', $searchTerm)
+                    ->orWhere('description', 'like', $searchTerm);
+            })
+            ->paginate(5);
+
+        return view('livewire.request.my-request', [
+            'documents' => $documents
+        ]);
     }
 }

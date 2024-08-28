@@ -114,7 +114,11 @@
             can_submit="true">{{ __('Submit') }}</x-bladewind::button>
 
     </form>
+    <br>
+
     <table class="table">
+        <input type="text" wire:model.debounce.300ms="search" placeholder="Search documents..."
+            class="form-control mb-3">
         <thead>
             <tr>
                 <th>Title</th>
@@ -148,6 +152,8 @@
             @endforeach
         </tbody>
     </table>
+    {{ $documents->links() }}
+
     @if (session()->has('message'))
         <div class="alert alert-success mt-3">
             {{ session('message') }}

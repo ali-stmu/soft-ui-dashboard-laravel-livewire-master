@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 class AddUser extends Component
 {
     use WithPagination;
+    protected $paginationTheme = 'bootstrap'; // Optional, if you want Bootstrap-styled pagination
+
 
     public $name;
     public $message;

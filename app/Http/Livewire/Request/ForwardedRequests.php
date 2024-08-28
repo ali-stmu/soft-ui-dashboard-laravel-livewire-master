@@ -3,21 +3,30 @@
 namespace App\Http\Livewire\Request;
 use App\Models\ApprovalRequest;
 use Illuminate\Support\Facades\Auth;
-
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ForwardedRequests extends Component
 {
+    use WithPagination;
+
+    public $searchTerm;
+    protected $paginationTheme = 'bootstrap'; // Optional for Bootstrap-styled pagination
+
     public function render()
     {
-        return view('livewire.request.forwarded-requests');
-    }
+        $searchTerm = '%' . $this->searchTerm . '%';
 
-    public function mount()
+        $requestes = ApprovalRequest::where('assigned_id', Auth::id())
+            ->where('status', 'finalapproved')
+            ->whereHas('document', function ($query) use ($searchTerm) {
+                $query->where('title', 'like', $searchTerm)
+                      ->orWhere('description', 'like', $searchTerm);
+            })
+            ->paginate(10); // 10 items per page
 
-    {
-        $this->requestes = ApprovalRequest::where('assigned_id', Auth::id())
-        ->where('status', 'finalapproved')
-        ->get();    
+        return view('livewire.request.forwarded-requests', [
+            'requestes' => $requestes
+        ]);
     }
 }
