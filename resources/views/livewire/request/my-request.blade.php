@@ -121,6 +121,7 @@
             class="form-control mb-3">
         <thead>
             <tr>
+                <th>ID</th> <!-- New column for ID -->
                 <th>Title</th>
                 <th>Description</th>
                 <th>Attachment</th>
@@ -133,6 +134,7 @@
         <tbody>
             @foreach ($documents as $document)
                 <tr>
+                    <td>{{ $document->id }}</td> <!-- Display document ID -->
                     <td>{{ $document->title }}</td>
                     <td>{{ $document->description }}</td>
                     <td>

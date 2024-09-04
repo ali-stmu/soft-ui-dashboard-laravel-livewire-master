@@ -102,14 +102,17 @@ class MyRequest extends Component
 
     public function render()
     {
-        $searchTerm = '%' . $this->search . '%';
+        $query = Document::query();
 
-        $documents = Document::where('created_by_id', auth()->id())
-            ->where(function ($query) use ($searchTerm) {
-                $query->where('title', 'like', $searchTerm)
-                    ->orWhere('description', 'like', $searchTerm);
-            })
-            ->paginate(5);
+        if ($this->search) {
+            $query->where(function($subQuery) {
+                $subQuery->where('title', 'like', '%' . $this->search . '%')
+                         ->orWhere('description', 'like', '%' . $this->search . '%')
+                         ->orWhere('id', 'like', '%' . $this->search . '%'); // Include ID in the search
+            });
+        }
+    
+        $documents = $query->paginate(5);
 
         return view('livewire.request.my-request', [
             'documents' => $documents
