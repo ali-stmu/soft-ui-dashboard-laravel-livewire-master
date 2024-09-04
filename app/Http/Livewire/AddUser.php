@@ -133,27 +133,46 @@ class AddUser extends Component
             'designationId' => 'required',
             'roleId' => 'required',
         ]);
-
+    
         $user = User::findOrFail($this->userIdToEdit);
         $changes = [];
-
+    
         // Check for changes and store old and new values
         if ($user->name !== $this->name) {
-            $changes['name'] = ['old' => $user->name, 'new' => $this->name];
+            $changes['name'] = [
+                'old' => $user->name, 
+                'new' => $this->name
+            ];
         }
+    
         if ($user->email !== $this->email) {
-            $changes['email'] = ['old' => $user->email, 'new' => $this->email];
+            $changes['email'] = [
+                'old' => $user->email, 
+                'new' => $this->email
+            ];
         }
+    
         if ($user->department_id !== $this->departmentId) {
-            $changes['department'] = ['old' => Department::find($user->department_id)->name, 'new' => Department::find($this->departmentId)->name];
+            $changes['department'] = [
+                'old' => isset($user->department_id) ? Department::find($user->department_id)->name : 'N/A',
+                'new' => isset($this->departmentId) ? Department::find($this->departmentId)->name : 'N/A'
+            ];
         }
+    
         if ($user->designation_id !== $this->designationId) {
-            $changes['designation'] = ['old' => Designation::find($user->designation_id)->name, 'new' => Designation::find($this->designationId)->name];
+            $changes['designation'] = [
+                'old' => isset($user->designation_id) ? Designation::find($user->designation_id)->name : 'N/A',
+                'new' => isset($this->designationId) ? Designation::find($this->designationId)->name : 'N/A'
+            ];
         }
+    
         if ($user->role_id !== $this->roleId) {
-            $changes['role'] = ['old' => Role::find($user->role_id)->name, 'new' => Role::find($this->roleId)->name];
+            $changes['role'] = [
+                'old' => isset($user->role_id) ? Role::find($user->role_id)->name : 'N/A',
+                'new' => isset($this->roleId) ? Role::find($this->roleId)->name : 'N/A'
+            ];
         }
-
+    
         $user->update([
             'name' => $this->name,
             'email' => $this->email,
@@ -161,16 +180,17 @@ class AddUser extends Component
             'designation_id' => $this->designationId,
             'role_id' => $this->roleId,
         ]);
-
+    
         // Send edit notification email
         \Mail::to($user->email)->send(new \App\Mail\UserEditNotification($user, $changes));
-
+    
         // Clear input fields after submission
         $this->reset(['name', 'email', 'departmentId', 'designationId', 'roleId', 'userIdToEdit']);
         $this->message = 'User updated successfully.';
         session()->flash('message', 'User updated successfully.');
         $this->mount();
     }
+    
 
     public function disableUser($userId)
     {
