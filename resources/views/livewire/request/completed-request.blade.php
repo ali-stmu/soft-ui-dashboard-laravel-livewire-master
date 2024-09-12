@@ -10,6 +10,8 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>#</th> <!-- Serial number column -->
+
                     <th>Title</th>
                     <th>Description</th>
                     <th>Initiator</th>
@@ -20,8 +22,10 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($requestes as $request)
+                @foreach ($requestes as $index => $request)
                     <tr>
+                        <td>{{ ($requestes->currentPage() - 1) * $requestes->perPage() + $index + 1 }}</td>
+                        <!-- Display serial number -->
                         <td>{{ $request->document->title }}</td>
                         <td>{{ $request->document->description }}</td>
                         <td>{{ $request->assignedBy->name }}</td>
