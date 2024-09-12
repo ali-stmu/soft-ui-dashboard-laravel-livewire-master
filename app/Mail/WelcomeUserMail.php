@@ -42,7 +42,11 @@ class WelcomeUserMail extends Mailable
                         'department' => $this->department,
                         'designation' => $this->designation,
                         'role' => $this->role,
-                        'university' => 'Shifa Tameer Millat University'
+                        'university' => 'Shifa Tameer Millat University',
+                    ])
+                    ->attach(public_path('storage/attachments/Diary Management System Document.pdf'), [
+                        'as' => 'Diary Management System Document.pdf',
+                        'mime' => 'application/pdf',
                     ]);
     }
 }
