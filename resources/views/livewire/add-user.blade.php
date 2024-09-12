@@ -32,7 +32,7 @@
             <div class="form-group">
                 <label for="department" class="form-control-label">Department</label>
                 <select wire:model="departmentId"
-                    class="form-control @error('departmentId') border border-danger @enderror" id="department">
+                    class="form-control select2 @error('departmentId') border border-danger @enderror" id="department">
                     <option value="">Select Department</option>
                     @foreach ($departments as $department)
                         <option value="{{ $department->id }}">{{ $department->name }}</option>
@@ -47,7 +47,8 @@
             <div class="form-group">
                 <label for="designation" class="form-control-label">Designation</label>
                 <select wire:model="designationId"
-                    class="form-control @error('designationId') border border-danger @enderror" id="designation">
+                    class="form-control select2 @error('designationId') border border-danger @enderror"
+                    id="designation">
                     <option value="">Select Designation</option>
                     @foreach ($designations as $designation)
                         <option value="{{ $designation->id }}">{{ $designation->name }}</option>
@@ -62,7 +63,7 @@
     <div class="col">
         <div class="form-group">
             <label for="role" class="form-control-label">Role</label>
-            <select wire:model="roleId" class="form-control @error('roleId') border border-danger @enderror"
+            <select wire:model="roleId" class="form-control select2 @error('roleId') border border-danger @enderror"
                 id="role">
                 <option value="">Select Role</option>
                 @foreach ($roles as $role)
@@ -74,6 +75,7 @@
             @enderror
         </div>
     </div>
+
 
     <div class="col">
         <button wire:click="saveUser" class="btn btn-primary">Save</button>
@@ -95,39 +97,41 @@
                         <table class="table align-items-center justify-content-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Name
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">S/N
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name
                                     </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Email
+                                        Email</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Department</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Designation</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Status</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role
                                     </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Department
-                                    </th>
+                                        Created/Updated By</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Time
+                                        Stamp</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Designation
-                                    </th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Status
-                                    </th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Role
-                                    </th>
-
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Created/Updated By
-                                    </th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Time Stamp
-                                    </th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Actions
-                                    </th>
+                                        Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($users as $user)
+                                @foreach ($users as $index => $user)
                                     <tr @if ($user->status == 'inactive') style="opacity: 0.9" @endif>
+                                        <td>
+                                            <div class="d-flex px-2">
+                                                <div class="my-auto">
+                                                    <!-- Adjusted Serial number -->
+                                                    <h6 class="mb-0 text-sm">
+                                                        {{ ($users->currentPage() - 1) * $users->perPage() + $index + 1 }}
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td>
                                             <div class="d-flex px-2">
                                                 <div class="my-auto">
@@ -168,7 +172,6 @@
                                                 </div>
                                             </div>
                                         </td>
-
                                         <td>
                                             <div class="d-flex px-2">
                                                 <div class="my-auto">
@@ -197,31 +200,26 @@
                                         <td>
                                             <!-- Edit button -->
                                             <button wire:click="editUser({{ $user->id }})"
-                                                class="btn btn-sm btn-info" title="Edit">
-                                                Edit
-                                            </button>
+                                                class="btn btn-sm btn-info" title="Edit">Edit</button>
 
-
-
-                                            <!-- Enable button (only if user status is inactive) -->
+                                            <!-- Enable/Disable buttons based on status -->
                                             @if ($user->status == 'inactive')
                                                 <button wire:click="enableUser({{ $user->id }})"
                                                     class="btn btn-sm btn-success" title="Enable">
                                                     Enable
                                                 </button>
                                             @else
-                                                <!-- Disable button -->
                                                 <button wire:click="disableUser({{ $user->id }})"
                                                     class="btn btn-sm btn-danger" title="Disable">
                                                     Disable
                                                 </button>
                                             @endif
                                         </td>
-
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+
                         <div class="d-flex justify-content-center mt-4">
                             {{ $users->links() }}
                         </div>
@@ -232,10 +230,36 @@
     </div>
     <script>
         document.addEventListener('livewire:load', function() {
+            // Function to initialize select2
+            function initializeSelect2(selector, model) {
+                $(selector).select2({
+                    placeholder: "Select " + model,
+                    allowClear: true
+                }).on('change', function() {
+                    @this.set(model + 'Id', $(this).val());
+                });
+            }
+
+            // Initialize select2 for designation, department, and role
+            initializeSelect2('#designation', 'designation');
+            initializeSelect2('#department', 'department');
+            initializeSelect2('#role', 'role');
+        });
+
+        document.addEventListener('livewire:update', function() {
+            // Re-initialize select2 after Livewire updates
+            $('#designation, #department, #role').select2({
+                allowClear: true
+            });
+        });
+
+        document.addEventListener('livewire:load', function() {
             Livewire.on('userStatusChanged', () => {
                 location.reload();
             });
         });
     </script>
+
+
 
 </div>

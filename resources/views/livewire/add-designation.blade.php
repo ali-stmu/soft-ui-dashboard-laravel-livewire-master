@@ -31,21 +31,31 @@
                         <table class="table align-items-center justify-content-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Name
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">S/N
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name
                                     </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Created/Updated By</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Time
+                                        Stamp</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Time Stamp</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Actions
-                                    </th>
+                                        Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($designations as $designation)
+                                @foreach ($designations as $index => $designation)
                                     <tr>
+                                        <td>
+                                            <div class="d-flex px-2">
+                                                <div class="my-auto">
+                                                    <!-- Adjusted Serial number -->
+                                                    <h6 class="mb-0 text-sm">
+                                                        {{ ($designations->currentPage() - 1) * $designations->perPage() + $index + 1 }}
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td>
                                             <div class="d-flex px-2">
                                                 <div class="my-auto">
@@ -83,6 +93,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+
                         <div class="mt-3">
                             {{ $designations->links() }} <!-- Pagination links -->
                         </div>

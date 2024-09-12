@@ -1,8 +1,12 @@
 <div class="text-center">
     <div style="margin-left: 5rem; margin-right: 5rem;">
+        <div class="mb-3">
+            <input type="text" wire:model="search" class="form-control" placeholder="Search...">
+        </div>
         <table class="table mx-auto">
             <thead>
                 <tr>
+                    <th>#</th> <!-- Serial Number Header -->
                     <th>Title</th>
                     <th>Description</th>
                     <th>Initiator</th>
@@ -15,13 +19,18 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($requestes as $request)
+                @foreach ($requestes as $index => $request)
                     @php
                         // Calculate the difference in days between the current date and the request's creation date
                         $differenceInDays = now()->diffInDays($request->created_at);
                     @endphp
+
+
                     <tr style="{{ $differenceInDays > 3 ? 'color: red;' : '' }}">
+
+                        <td>{{ ($requestes->currentPage() - 1) * $requestes->perPage() + $index + 1 }}</td>
                         <td>
+
                             <button wire:click="getAllApprovalRequests({{ $request->document->id }})"
                                 class="document-title" data-toggle="modal"
                                 data-target="#documentDetailsModal{{ $request->id }}">
@@ -170,6 +179,8 @@
                 @endforeach
             </tbody>
         </table>
+        {{ $requestes->links() }}
+
         <div class="modal fade" id="approveConfirmationModal" tabindex="-1"
             aria-labelledby="approveConfirmationModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -184,18 +195,18 @@
                             <div class="mb-3">
                                 <div class="row">
                                     <div class="col">
-                                        <label for="remarks" class="form-label">Remarks</label>
+                                        <label for="remarks" class="">Remarks</label>
                                         <input wire:model.defer="remarks" type="text" class="form-control"
                                             id="remarks">
                                     </div>
                                     <div class="col">
-                                        <label for="date" class="form-label">Return/Forward Date</label>
+                                        <label for="date" class="">Return/Forward Date</label>
                                         <input wire:model.defer="returnForwardDate" type="date" class="form-control"
                                             id="returnForwardDate">
                                     </div>
                                 </div>
                             </div>
-                            <button wire:click="confirmApprove" type="submit" class="btn btn-primary">Confirm</button>
+                            <button wire:click="confirmApprove" type="submit" class="btn">Confirm</button>
                         </form>
                     </div>
                 </div>
@@ -217,19 +228,18 @@
                             <div class="mb-3">
                                 <div class="row">
                                     <div class="col">
-                                        <label for="rejectremarks" class="form-label">Remarks</label>
+                                        <label for="rejectremarks" class="">Remarks</label>
                                         <input wire:model.defer="rejectremarks" type="text" class="form-control"
                                             id="rejectremarks">
                                     </div>
                                     <div class="col">
-                                        <label for="date" class="form-label">Return/Forward Date</label>
+                                        <label for="date" class="">Return/Forward Date</label>
                                         <input wire:model.defer="rejectreturnForwardDate" type="date"
                                             class="form-control" id="rejectreturnForwardDate">
                                     </div>
                                 </div>
                             </div>
-                            <button wire:click="rejectRequest" type="submit"
-                                class="btn btn-primary">Confirm</button>
+                            <button wire:click="rejectRequest" type="submit" class="btn">Confirm</button>
                         </form>
                     </div>
                 </div>

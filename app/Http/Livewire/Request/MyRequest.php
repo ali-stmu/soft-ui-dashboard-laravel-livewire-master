@@ -21,7 +21,7 @@ class MyRequest extends Component
 
     public $title, $description, $attachment, $dispatch_date, $approved_date, $dispatcher_id;
     public $dispatchers, $departments, $roles;
-    public $departmentId, $roleId, $users = [], $userId, $search = '';
+    public $departmentId, $users = [], $userId, $search = '';
 
     protected $rules = [
         'title' => 'required|string',
@@ -31,26 +31,23 @@ class MyRequest extends Component
         'approved_date' => 'nullable|date',
         'dispatcher_id' => 'required', // Add validation rule for dispatcher_id
     ];
-    public function updatedRoleId($value)
-    {
-        // This method will automatically be called whenever $roleId is updated
-        // Fetch users based on the selected role
-        $this->users = User::where('role_id', $value)
-                           ->where('department_id', $this->departmentId)
-                           ->where('status', 'active')
-                           ->get();
-    }
+    // public function updatedRoleId($value)
+    // {
+    //     // This method will automatically be called whenever $roleId is updated
+    //     // Fetch users based on the selected role
+    //     $this->users = User::where('role_id', $value)
+    //                        ->where('department_id', $this->departmentId)
+    //                        ->where('status', 'active')
+    //                        ->get();
+    // }
 
     public function updatedDepartmentId($value)
     {
-        // This method will automatically be called whenever $roleId is updated
-        // Fetch users based on the selected role
-        $this->users = User::where('role_id', $this->roleId)
-                           ->where('department_id', $value)
+        // Fetch users based on the selected department
+        $this->users = User::where('department_id', $value)
                            ->where('status', 'active')
                            ->get();
     }
-    
     public function mount()
     {
         $this->dispatchers = User::pluck('name', 'id');

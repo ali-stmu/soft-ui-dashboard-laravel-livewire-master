@@ -11,10 +11,14 @@ use App\Models\Department; // Import User model
 use App\Models\Role; // Import User model
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Date; // Import Date class for better date formatting
+use Livewire\WithPagination; // Import WithPagination trait
+
 
 class PendingRequest extends Component
 {
-    public $requestes;
+    use WithPagination; // Add this line to enable pagination
+
+    public $search = ''; // Add search property
     public $selectedRequestId = -1;
     public $remarks;
     public $rejectremarks;
@@ -34,12 +38,24 @@ class PendingRequest extends Component
 
     public function render()
     {
-        return view('livewire.request.pending-request');
+        // Apply search filter and pagination
+        $requestes = ApprovalRequest::join('documents', 'approval_requests.document_id', '=', 'documents.id')
+            ->where('approval_requests.assigned_id', Auth::id())
+            ->where('approval_requests.status', 'pending')
+            ->where(function($query) {
+                $query->where('documents.title', 'like', "%{$this->search}%")
+                      ->orWhere('documents.description', 'like', "%{$this->search}%");
+            })
+            ->select('approval_requests.*') // Select fields from approval_requests
+            ->paginate(10); // Adjust the number per page if needed
+    
+        return view('livewire.request.pending-request',['requestes' => $requestes]);
     }
+    
 
     public function mount()
     {
-        $this->requestes = ApprovalRequest::where('assigned_id', Auth::id())
+        $requestes = ApprovalRequest::where('assigned_id', Auth::id())
         ->where('status', 'pending')
         ->get();   
         $this->departments = Department::all();

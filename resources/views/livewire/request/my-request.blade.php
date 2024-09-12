@@ -34,7 +34,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="dispatcher_id">{{ __('Dispatcher') }}</label>
-                    <select wire:model="dispatcher_id" class="form-control" id="dispatcher_id">
+                    <select wire:model="dispatcher_id" class="form-control select2" id="dispatcher_id">
                         <option value="">Select Dispatcher</option>
                         @if ($dispatchers)
                             @foreach ($dispatchers as $id => $name)
@@ -49,6 +49,7 @@
                     @enderror
                 </div>
             </div>
+
         </div>
         <div class="row">
             <div class="col-md-6">
@@ -63,11 +64,12 @@
         </div>
         <h5>Requested To:</h5>
         <div class="row">
-            <div class="col">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="department" class="form-control-label">Department</label>
                     <select wire:model="departmentId"
-                        class="form-control @error('departmentId') border border-danger @enderror" id="department">
+                        class="form-control select2 @error('departmentId') border border-danger @enderror"
+                        id="department">
                         <option value="">Select Department</option>
                         @foreach ($departments as $department)
                             <option value="{{ $department->id }}">{{ $department->name }}</option>
@@ -78,11 +80,11 @@
                     @enderror
                 </div>
             </div>
-            <div class="col">
+            {{-- <div class="col-md-4">
                 <div class="form-group">
                     <label for="role" class="form-control-label">Role</label>
-                    <select wire:model="roleId" class="form-control @error('roleId') border border-danger @enderror"
-                        id="role">
+                    <select wire:model="roleId"
+                        class="form-control select2  @error('roleId') border border-danger @enderror" id="role">
                         <option value="">Select Role</option>
                         @foreach ($roles as $role)
                             <option value="{{ $role->id }}">{{ $role->name }}</option>
@@ -92,12 +94,12 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-            </div>
-            <div class="col">
+            </div> --}}
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="user" class="form-control-label">User</label>
-                    <select wire:model="userId" class="form-control @error('userId') border border-danger @enderror"
-                        id="user">
+                    <select wire:model="userId"
+                        class="form-control select2  @error('userId') border border-danger @enderror" id="user">
                         <option value="">Select User</option>
                         @foreach ($users as $user)
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -110,6 +112,7 @@
             </div>
         </div>
 
+
         <x-bladewind::button outline="true" color="red" radius="small"
             can_submit="true">{{ __('Submit') }}</x-bladewind::button>
 
@@ -121,6 +124,7 @@
             class="form-control mb-3">
         <thead>
             <tr>
+                <th>#</th> <!-- Column for Serial Number -->
                 <th>ID</th> <!-- New column for ID -->
                 <th>Title</th>
                 <th>Description</th>
@@ -132,8 +136,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($documents as $document)
+            @foreach ($documents as $index => $document)
                 <tr>
+                    <td>{{ ($documents->currentPage() - 1) * $documents->perPage() + $index + 1 }}</td>
+                    <!-- Serial number based on iteration -->
                     <td>{{ $document->id }}</td> <!-- Display document ID -->
                     <td>{{ $document->title }}</td>
                     <td>{{ $document->description }}</td>
@@ -149,11 +155,11 @@
                     <td>{{ $document->dispatcher?->name ?? '--' }}</td>
                     <td>{{ $document->user?->name ?? '--' }}</td> <!-- Handling null user and null user name -->
                     <td>{{ $document->approved_date ?? '--' }}</td>
-
                 </tr>
             @endforeach
         </tbody>
     </table>
+
     {{ $documents->links() }}
 
     @if (session()->has('message'))
@@ -161,4 +167,40 @@
             {{ session('message') }}
         </div>
     @endif
+    <script>
+        document.addEventListener('livewire:load', function() {
+            // Function to initialize select2
+            function initializeSelect2(selector, model) {
+                $(selector).select2({
+                    placeholder: "Select " + model.charAt(0).toUpperCase() + model.slice(1),
+                    allowClear: true
+                }).on('change', function() {
+                    @this.set(model + 'Id', $(this).val());
+                });
+            }
+
+            // Initialize select2 for designation, department, and role
+            initializeSelect2('#designation', 'designation');
+            initializeSelect2('#department', 'department');
+            initializeSelect2('#role', 'role');
+            initializeSelect2('#user', 'user');
+
+            // Add other dropdowns as needed
+        });
+
+        document.addEventListener('livewire:update', function() {
+            // Re-initialize select2 after Livewire updates
+            $('#designation, #department, #role,#user').select2({
+                allowClear: true
+            });
+        });
+
+        document.addEventListener('livewire:load', function() {
+            Livewire.on('userStatusChanged', () => {
+                location.reload();
+            });
+        });
+    </script>
+
+
 </div>

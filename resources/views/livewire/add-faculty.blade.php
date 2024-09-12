@@ -47,6 +47,8 @@
                         <table class="table align-items-center justify-content-center mb-0">
                             <thead>
                                 <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">S/N
+                                    </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name
                                     </th>
                                     <th
@@ -64,8 +66,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($faculties as $faculty)
+                                @foreach ($faculties as $index => $faculty)
                                     <tr>
+                                        <td>
+                                            <div class="d-flex px-2">
+                                                <div class="my-auto">
+                                                    <!-- Adjusted Serial number -->
+                                                    <h6 class="mb-0 text-sm">
+                                                        {{ ($faculties->currentPage() - 1) * $faculties->perPage() + $index + 1 }}
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td>
                                             <div class="d-flex px-2">
                                                 <div class="my-auto">
@@ -113,6 +125,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+
                         <!-- Pagination Links -->
                         <div class="d-flex justify-content-center mt-3">
                             {{ $faculties->links() }}
