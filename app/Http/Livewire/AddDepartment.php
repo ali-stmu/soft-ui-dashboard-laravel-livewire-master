@@ -15,7 +15,7 @@ class AddDepartment extends Component
     protected $paginationTheme = 'bootstrap'; // Optional, if you want Bootstrap-styled pagination
 
     public $name;
-    public $typeId;
+    public $type; // This will now store 'Academic' or 'Non-Academic'
     public $facultyId;
     public $facultyTypes;
     public $faculties;
@@ -27,9 +27,10 @@ class AddDepartment extends Component
 
     protected $rules = [
         'name' => 'required',
-        'typeId' => 'required',
+        'type' => 'required|in:Academic,Non-Academic', // Validate type directly from the enum
         'facultyId' => 'required',
     ];
+    
 
     public function mount()
     {
@@ -59,13 +60,14 @@ class AddDepartment extends Component
         } else {
             Department::create([
                 'name' => $this->name,
-                'type_id' => $this->typeId,
+                'type' => $this->type, // Store the type directly
                 'faculty_id' => $this->facultyId,
                 'created_by_id' => Auth::id(),
             ]);
+            
         }
 
-        $this->reset(['name', 'typeId', 'facultyId', 'departmentId']);
+        $this->reset(['name', 'type', 'facultyId', 'departmentId']);
         $this->render();
     }
 
@@ -73,7 +75,7 @@ class AddDepartment extends Component
     {
         $department = Department::findOrFail($departmentId);
         $this->name = $department->name;
-        $this->typeId = $department->type_id;
+        $this->type = $department->type;
         $this->facultyId = $department->faculty_id;
         $this->departmentId = $departmentId;
     }
@@ -85,12 +87,12 @@ class AddDepartment extends Component
         $department = Department::findOrFail($this->departmentId);
         $department->update([
             'name' => $this->name,
-            'type_id' => $this->typeId,
+            'type' => $this->type,
             'faculty_id' => $this->facultyId,
             'created_by_id' => Auth::id(),
         ]);
 
-        $this->reset(['name', 'typeId', 'facultyId', 'departmentId']);
+        $this->reset(['name', 'type', 'facultyId', 'departmentId']);
         $this->render();
     }
 
