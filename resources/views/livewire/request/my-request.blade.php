@@ -33,6 +33,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
+
                     <label for="dispatcher_id">{{ __('Dispatcher') }}</label>
                     <select wire:model="dispatcher_id" class="form-control select2" id="dispatcher_id">
                         <option value="">Select Dispatcher</option>
@@ -40,15 +41,28 @@
                             @foreach ($dispatchers as $id => $name)
                                 <option value="{{ $id }}">{{ $name }}</option>
                             @endforeach
-                        @else
-                            <option value="" disabled>No dispatchers available</option>
                         @endif
+                        <option value="other">Other</option>
                     </select>
                     @error('dispatcher_id')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
+
+
+            <!-- Textbox to input custom dispatcher name -->
+            @if ($dispatcher_id === 'other')
+                <div class="form-group">
+                    <label for="custom_dispatcher">{{ __('Custom Dispatcher Name') }}</label>
+                    <input wire:model="custom_dispatcher" type="text" class="form-control" id="custom_dispatcher"
+                        placeholder="Enter custom dispatcher name">
+                    @error('custom_dispatcher')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            @endif
+
 
         </div>
         <div class="row">
@@ -97,10 +111,10 @@
             </div> --}}
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="user" class="form-control-label">User</label>
+                    <label for="user" class="form-control-label">Employee</label>
                     <select wire:model="userId"
                         class="form-control select2  @error('userId') border border-danger @enderror" id="user">
-                        <option value="">Select User</option>
+                        <option value="">Select Employee</option>
                         @foreach ($users as $user)
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                         @endforeach
@@ -152,7 +166,7 @@
                         @endif
                     </td>
                     <td>{{ $document->dispatch_date }}</td>
-                    <td>{{ $document->dispatcher?->name ?? '--' }}</td>
+                    <td>{{ $document->dispatcher?->name ?? $document->dispatcher_name }}</td>
                     <td>{{ $document->user?->name ?? '--' }}</td> <!-- Handling null user and null user name -->
                     <td>{{ $document->approved_date ?? '--' }}</td>
                 </tr>

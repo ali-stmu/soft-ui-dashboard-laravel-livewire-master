@@ -17,6 +17,7 @@ class Document extends Model
         'attachment',
         'dispatch_date',
         'dispatcher_id',
+        'dispatcher_name',
         'approved_by_id',
         'approved_date',
         'status',
