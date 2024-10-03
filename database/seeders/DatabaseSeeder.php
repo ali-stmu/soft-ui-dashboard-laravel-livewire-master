@@ -21,6 +21,12 @@ class DatabaseSeeder extends Seeder
         //     'password' => Hash::make('secret')
         // ]);
         $this->call(FacultyTypeSeeder::class);
-        $this->call(RolesTableSeeder::class);
+        // $this->call(RolesTableSeeder::class);
+        $this->call([
+            OricFormStatusSeeder::class,
+        ]);
+        $this->call([
+            DirectorOricRoleSeeder::class,
+        ]);
     }
 }

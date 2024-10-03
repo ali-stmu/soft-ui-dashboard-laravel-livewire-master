@@ -27,6 +27,10 @@ use App\Http\Livewire\Request\ForwardWithSignature;
 use App\Http\Livewire\Request\ForwardedRequests;
 use App\Http\Livewire\Request\DocumentTimeline;
 
+use App\Http\Livewire\Oric\OricForm;
+use App\Http\Livewire\Oric\AddReviewer;
+
+
 use Illuminate\Http\Request;
 
 /*
@@ -69,6 +73,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/rtl', Rtl::class)->name('rtl');
     Route::get('/laravel-user-profile', UserProfile::class)->name('user-profile');
     Route::get('/laravel-user-management', UserManagement::class)->name('user-management');
+
+    //ORIC Routes
+    Route::get('/oric-form', OricForm::class)->name('oric-form');
+    Route::get('/add-reviewer', AddReviewer::class)->name('add-reviewer');
+
+
      // Routes accessible only to VC
      Route::group(['middleware' => ['role:VC']], function () {
         Route::get('/add-faculty', AddFaculty::class)->name('add-faculty');
@@ -78,4 +88,5 @@ Route::middleware('auth')->group(function () {
 
         // ... other VC specific routes
     });
+    
 });
