@@ -29,6 +29,7 @@ use App\Http\Livewire\Request\DocumentTimeline;
 
 use App\Http\Livewire\Oric\OricForm;
 use App\Http\Livewire\Oric\AddReviewer;
+use App\Http\Livewire\Oric\ViewResearchGrants;
 
 
 use Illuminate\Http\Request;
@@ -67,7 +68,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-request', MyRequest::class)->name('my-request');
     Route::get('/completed-request', CompletedRequest::class)->name('completed-request');
     Route::get('/forwarded-request', ForwardedRequests::class)->name('forwarded-request');
-    Route::get('/document-timeline', DocumentTimeline::class)->name('document-timeline');
     Route::get('/static-sign-in', StaticSignIn::class)->name('sign-in');
     Route::get('/static-sign-up', StaticSignUp::class)->name('static-sign-up');
     Route::get('/rtl', Rtl::class)->name('rtl');
@@ -75,16 +75,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/laravel-user-management', UserManagement::class)->name('user-management');
 
     //ORIC Routes
-    Route::get('/oric-form', OricForm::class)->name('oric-form');
-    Route::get('/add-reviewer', AddReviewer::class)->name('add-reviewer');
+
+    Route::group(['middleware' => ['auth', 'director_oric']], function () {
+        Route::get('/oric-form', OricForm::class)->name('oric-form');
+        Route::get('/add-reviewer', AddReviewer::class)->name('add-reviewer');
+        Route::get('/view-research-grants', ViewResearchGrants::class)->name('view-research-grants');
+    });
+
 
 
      // Routes accessible only to VC
-     Route::group(['middleware' => ['role:VC']], function () {
+    Route::group(['middleware' => ['role:VC']], function () {
         Route::get('/add-faculty', AddFaculty::class)->name('add-faculty');
         Route::get('/add-department', AddDepartment::class)->name('add-department');
         Route::get('/add-designation', AddDesignation::class)->name('add-designation');
         Route::get('/add-user', AddUser::class)->name('add-user');
+        Route::get('/document-timeline', DocumentTimeline::class)->name('document-timeline');
+
 
         // ... other VC specific routes
     });
