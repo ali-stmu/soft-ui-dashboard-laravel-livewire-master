@@ -5,29 +5,27 @@
             border-collapse: collapse;
         }
 
-        .research-table th,
-        .research-table td {
-            padding: 0.75rem;
-            border: 1px solid #dee2e6;
-            vertical-align: top;
-            text-align: left;
-        }
-
         .research-table th {
             background-color: rgb(210, 219, 223);
-            width: 25%;
+            text-align: center;
         }
 
         .research-table td {
+            padding: 1rem;
+            border: 1px solid #dee2e6;
+            vertical-align: top;
             word-wrap: break-word;
             white-space: normal;
         }
 
-        .heading-title {
+        .question {
             background-color: rgb(210, 219, 223);
-            padding: 0.5rem;
-            border-radius: 0.75rem;
-            text-align: center;
+            font-weight: bold;
+        }
+
+        .answer {
+            max-width: 70%;
+            /* Limit width to handle large answers */
         }
     </style>
 
@@ -155,57 +153,90 @@
 
                     <table class="research-table">
                         <tr>
-                            <th colspan="4">
+                            <th colspan="2">
                                 <h2 class="heading-title">Research Details</h2>
                             </th>
                         </tr>
                         <tr>
-                            <th>What is the significance of your research for human health or its contribution to
-                                relevant areas of basic biomedical science or in your area of interest?</th>
-                            <td>{{ $researchGrant->significance_answer }}</td>
+                            <td colspan="2" class="question">
+                                <strong>What is the significance of your research for human health or its contribution
+                                    to relevant areas of basic biomedical science or in your area of interest?</strong>
+                            </td>
                         </tr>
                         <tr>
-                            <th>Provide sufficient details to show that the work will add distinct value to what is
-                                already known, or in progress and will benefit or fulfill unmet national needs in the
-                                health service or industry.</th>
-                            <td>{{ $researchGrant->distinct_value_answer }}</td>
+                            <td colspan="2" class="answer">{{ $researchGrant->significance_answer }}</td>
                         </tr>
                         <tr>
-                            <th>Where the research plans involve creating resources or facilities, or forming consortia,
-                                networks, or centers of excellence, the case will need to address the potential added
-                                value, as well as issues of ownership, direction, and sustainability.</th>
-                            <td>{{ $researchGrant->research_plan_answer }}</td>
+                            <td colspan="2" class="question">
+                                <strong>Provide sufficient details to show that the work will add distinct value to what
+                                    is already known, or in progress and will benefit or fulfill unmet national needs in
+                                    the health service or industry.</strong>
+                            </td>
                         </tr>
                         <tr>
-                            <th>Aims and Objectives</th>
-                            <td>{{ $researchGrant->aims_and_objectives }}</td>
+                            <td colspan="2" class="answer">{{ $researchGrant->distinct_value_answer }}</td>
                         </tr>
                         <tr>
-                            <th>Milestone and Deliverable</th>
-                            <td>{{ $researchGrant->milestones_and_deliverables }}</td>
+                            <td colspan="2" class="question">
+                                <strong>Where the research plans involve creating resources or facilities, or forming
+                                    consortia, networks, or centers of excellence, the case will need to address the
+                                    potential added value, as well as issues of ownership, direction, and
+                                    sustainability.</strong>
+                            </td>
                         </tr>
                         <tr>
-                            <th>Work Plan Attachment</th>
-                            <td>
-                                @if ($researchGrant->attachment_irb_and_ec)
+                            <td colspan="2" class="answer">{{ $researchGrant->research_plan_answer }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="question">
+                                <strong>Aims and Objectives</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="answer">{{ $researchGrant->aims_and_objectives }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="question">
+                                <strong>Milestone and Deliverable</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="answer">{{ $researchGrant->milestones_and_deliverables }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="question">
+                                <strong>Work Plan Attachment</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="answer">
+                                @if ($researchGrant->work_plan_attachment)
                                     <a href="{{ asset('storage/' . $researchGrant->work_plan_attachment) }}"
-                                        target="_blank">
-                                        View Attachment
-                                    </a>
+                                        target="_blank">View Attachment</a>
                                 @else
                                     No attachment available
                                 @endif
                             </td>
                         </tr>
                         <tr>
-                            <th>Economic Significance</th>
-                            <td>{{ $researchGrant->economic_significance }}</td>
+                            <td colspan="2" class="question">
+                                <strong>Economic Significance</strong>
+                            </td>
                         </tr>
                         <tr>
-                            <th>Financial Request</th>
-                            <td>{{ $researchGrant->financial_request }}</td>
+                            <td colspan="2" class="answer">{{ $researchGrant->economic_significance }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="question">
+                                <strong>Financial Request</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="answer">{{ $researchGrant->financial_request }}</td>
                         </tr>
                     </table>
+
+
                 </tbody>
             </table>
         </div>
@@ -216,5 +247,4 @@
 
     </div>
 
-</div>
 </div>
