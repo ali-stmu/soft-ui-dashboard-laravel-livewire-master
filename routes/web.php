@@ -31,6 +31,7 @@ use App\Http\Livewire\Oric\OricForm;
 use App\Http\Livewire\Oric\AddReviewer;
 use App\Http\Livewire\Oric\ViewResearchGrants;
 use App\Http\Livewire\Oric\ShowResearchGrant;
+use App\Http\Livewire\Oric\SubmittedResearchGrants;
 
 
 use Illuminate\Http\Request;
@@ -77,12 +78,14 @@ Route::middleware('auth')->group(function () {
 
     //ORIC Routes
     Route::get('/oric-form', OricForm::class)->name('oric-form');
+    Route::get('/submitted-research-grant', SubmittedResearchGrants::class)->name('submitted-research-grant');
+    Route::get('/research-grants/{id}', ShowResearchGrant::class)->name('research-grants.show');
+
     Route::group(['middleware' => ['auth', 'director_oric']], function () {
         
         Route::get('/add-reviewer', AddReviewer::class)->name('add-reviewer');
         //Route::get('/view-research-grants', ViewResearchGrants::class)->name('view-research-grants');
         Route::get('/research-grants', ViewResearchGrants::class)->name('research-grants.index');
-        Route::get('/research-grants/{id}', ShowResearchGrant::class)->name('research-grants.show');
     });
 
 
