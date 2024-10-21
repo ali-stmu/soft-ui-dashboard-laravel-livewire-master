@@ -43,22 +43,20 @@ class ViewResearchGrants extends Component
                 // Update the existing remark
                 $remark->update([
                     'title' => $this->remarksTitle,
-                    'director_id' => Auth::id(), // You might not need to update this if it's not changing
+                    'director_id' => Auth::id(), // Optional: Only if the director changes
                 ]);
             } else {
                 // Create a new remark
                 Remark::create([
                     'title' => $this->remarksTitle,
-                    'director_id' => Auth::id(), // Get the current user ID
-                    'initiator_id' => $this->selectedUserId, // Store the user ID
-                    'form_id' => $this->selectedFormId, // Store the form ID
+                    'director_id' => Auth::id(),
+                    'initiator_id' => $this->selectedUserId,
+                    'form_id' => $this->selectedFormId,
                 ]);
             }
     
             // Reset fields
-            $this->remarksTitle = '';
-            $this->selectedUserId = null; // Reset user ID
-            $this->selectedFormId = null; // Reset form ID
+            $this->reset('remarksTitle', 'selectedUserId', 'selectedFormId');
     
             // Show a success message
             session()->flash('message', 'Remark saved successfully!');
@@ -70,6 +68,7 @@ class ViewResearchGrants extends Component
             session()->flash('error', 'Failed to save remark: ' . $e->getMessage());
         }
     }
+    
     
     public function render()
     {

@@ -49,6 +49,7 @@ class OricFormModal extends Model
         'economic_significance',
         'financial_request',
         'user_id',
+        'remarks',
     ];
 
     /**

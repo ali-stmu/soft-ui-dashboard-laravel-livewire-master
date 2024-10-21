@@ -49,7 +49,7 @@
                 <div class="modal-body">
                     <form id="returnRemarksForm" wire:submit.prevent="submitRemark"> <!-- Add the ID here -->
                         <div class="mb-3">
-                            <label for="remarks" class="form-label">Remarks</label>
+                            <label for="remarks" class="label">Remarks</label>
                             <textarea class="form-control" id="remarks" rows="3" wire:model.defer="remarksTitle" required></textarea>
                         </div>
                         <input type="hidden" wire:model="selectedFormId">
@@ -62,7 +62,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" form="returnRemarksForm">OK</button>
+                    <button type="submit" class="btn" form="returnRemarksForm">OK</button>
                     <!-- Add form attribute -->
                 </div>
             </div>
