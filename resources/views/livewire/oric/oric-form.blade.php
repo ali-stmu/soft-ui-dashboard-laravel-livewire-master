@@ -1,7 +1,10 @@
 <div class="container">
     <form wire:submit.prevent="submit">
-
-        <h2>Research Grant Application Form (STMU-G-A)</h2>
+        @if ($selectedFormId)
+            <h2>Edit Research Grant Application Form (STMU-G-A)</h2>
+        @else
+            <h2>Research Grant Application Form (STMU-G-A)</h2>
+        @endif
         <!-- Project Information -->
         <div class="card mb-3">
             <div class="card-body">
@@ -244,8 +247,17 @@
                             @error('attachment_irb_and_ec')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
+
+                            @if ($existing_irb_attachment)
+                                <div class="mt-2">
+                                    <strong>Existing Attachment:</strong>
+                                    <a href="{{ Storage::url($existing_irb_attachment) }}" target="_blank">View
+                                        File</a>
+                                </div>
+                            @endif
                         </div>
                     </div>
+
                 </div>
 
                 <div class="row">
@@ -260,6 +272,14 @@
                             @error('irb_ec_approval_letter_certificate')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
+                            @if ($existing_irb_ec_approval_letter_certificate)
+                                <div class="mt-2">
+                                    <strong>Existing Attachment:</strong>
+                                    <a href="{{ Storage::url($existing_irb_ec_approval_letter_certificate) }}"
+                                        target="_blank">View
+                                        File</a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -351,17 +371,24 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="work_plan_attachment" class="form-control-label">Work Plan Attachment</label>
-                            <input wire:model="work_plan_attachment"
-                                class="form-control @error('work_plan_attachment') border border-danger @enderror"
-                                type="file" id="work_plan_attachment">
-                            @error('work_plan_attachment')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="work_plan_attachment" class="form-control-label">Work Plan Attachment</label>
+                        <input wire:model="work_plan_attachment"
+                            class="form-control @error('work_plan_attachment') border border-danger @enderror"
+                            type="file" id="work_plan_attachment">
+                        @error('work_plan_attachment')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+
+                        @if ($existing_work_plan_attachment)
+                            <div class="mt-2">
+                                <strong>Existing Work Plan:</strong>
+                                <a href="{{ Storage::url($existing_work_plan_attachment) }}" target="_blank">View
+                                    File</a>
+
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -401,7 +428,13 @@
 
         <div class="row">
             <div class="col text-center">
-                <button type="submit" class="btn">Submit</button>
+                <button type="submit" class="btn">
+                    @if ($selectedFormId)
+                        Update Form
+                    @else
+                        Submit Form
+                    @endif
+                </button>
             </div>
         </div>
     </form>

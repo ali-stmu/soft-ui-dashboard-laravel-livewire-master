@@ -50,6 +50,7 @@ class OricFormModal extends Model
         'financial_request',
         'user_id',
         'remarks',
+        'status_id'
     ];
 
     /**

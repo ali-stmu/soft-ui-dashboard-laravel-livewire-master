@@ -77,15 +77,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/laravel-user-management', UserManagement::class)->name('user-management');
 
     //ORIC Routes
-    Route::get('/oric-form', OricForm::class)->name('oric-form');
+    Route::get('/oric-form/{formId?}', OricForm::class)->name('oric-form');
     Route::get('/submitted-research-grant', SubmittedResearchGrants::class)->name('submitted-research-grant');
     Route::get('/research-grants/{id}', ShowResearchGrant::class)->name('research-grants.show');
+    Route::get('/research-grants', ViewResearchGrants::class)->name('research-grants.index');
 
     Route::group(['middleware' => ['auth', 'director_oric']], function () {
         
         Route::get('/add-reviewer', AddReviewer::class)->name('add-reviewer');
         //Route::get('/view-research-grants', ViewResearchGrants::class)->name('view-research-grants');
-        Route::get('/research-grants', ViewResearchGrants::class)->name('research-grants.index');
     });
 
 
