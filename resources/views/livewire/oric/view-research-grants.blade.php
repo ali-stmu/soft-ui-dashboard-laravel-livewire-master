@@ -1,6 +1,14 @@
 <div>
     <div class="container mt-4">
         <h2 class="mb-4">Research Grants</h2>
+
+        <!-- Search input -->
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Search by Project Title or PI Name"
+                wire:model.debounce.300ms="search">
+        </div>
+
+        <!-- Table of Research Grants -->
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <thead class="thead-dark">
@@ -15,7 +23,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($oricForms as $form)
+                    @forelse ($oricForms as $form)
                         <tr>
                             <td>{{ $form->project_title }}</td>
                             <td>{{ $form->pi_name }}</td>
@@ -30,15 +38,23 @@
                                     data-user-id="{{ $form->user->id }}" data-id="{{ $form->id }}">Return</button>
                                 <button class="btn btn-success btn-sm" data-id="{{ $form->id }}">Forward</button>
                             </td>
-
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center">No research grants found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center">
+            {{ $oricForms->links() }}
+        </div>
     </div>
 
-    <!-- Return Modal -->
+    <!-- Return Modal (No changes needed here) -->
     <div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="returnModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -47,7 +63,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="returnRemarksForm" wire:submit.prevent="submitRemark"> <!-- Add the ID here -->
+                    <form id="returnRemarksForm" wire:submit.prevent="submitRemark">
                         <div class="mb-3">
                             <label for="remarks" class="label">Remarks</label>
                             <textarea class="form-control" id="remarks" rows="3" wire:model.defer="remarksTitle" required></textarea>
@@ -63,12 +79,10 @@
                 <div class="modal-footer">
                     <button type="button" class="btn" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn" form="returnRemarksForm">OK</button>
-                    <!-- Add form attribute -->
                 </div>
             </div>
         </div>
     </div>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -77,17 +91,16 @@
 
             returnButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    const userId = this.getAttribute('data-user-id'); // Get the user ID
-                    const formId = this.getAttribute('data-id'); // Get the form ID
-                    @this.set('selectedUserId', userId); // Set the selected user ID in Livewire
-                    @this.set('selectedFormId', formId); // Set the selected form ID in Livewire
-                    $('#returnModal').modal('show'); // Show the modal
+                    const userId = this.getAttribute('data-user-id');
+                    const formId = this.getAttribute('data-id');
+                    @this.set('selectedUserId', userId);
+                    @this.set('selectedFormId', formId);
+                    $('#returnModal').modal('show');
                 });
             });
         });
         window.addEventListener('refresh-page', () => {
-            location.reload(); // Refresh the page on successful remark submission
+            location.reload();
         });
     </script>
-
 </div>
