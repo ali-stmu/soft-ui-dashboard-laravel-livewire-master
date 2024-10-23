@@ -91,14 +91,18 @@
 
             returnButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    const userId = this.getAttribute('data-user-id');
-                    const formId = this.getAttribute('data-id');
-                    @this.set('selectedUserId', userId);
-                    @this.set('selectedFormId', formId);
-                    $('#returnModal').modal('show');
+                    const userId = this.getAttribute('data-user-id'); // Get the user ID
+                    const formId = this.getAttribute('data-id'); // Get the form ID
+                    @this.set('selectedUserId', userId); // Set the selected user ID in Livewire
+                    @this.set('selectedFormId', formId); // Set the selected form ID in Livewire
+
+                    // Ensure the modal is shown after setting values
+                    const returnModal = new bootstrap.Modal(document.getElementById('returnModal'));
+                    returnModal.show(); // Show the modal
                 });
             });
         });
+
         window.addEventListener('refresh-page', () => {
             location.reload();
         });
