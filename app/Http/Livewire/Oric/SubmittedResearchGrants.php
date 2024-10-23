@@ -4,12 +4,14 @@ namespace App\Http\Livewire\Oric;
 
 use Livewire\Component;
 use App\Models\OricFormModal;
+use App\Models\Remark; // Import the Remark model
 use Illuminate\Support\Facades\Auth;
 
 class SubmittedResearchGrants extends Component
 {
     public $oricForms;
-    public $selectedFormId = null; // To track the selected form for editing
+    public $selectedFormId = null;
+    public $remarks = []; // Store the remarks
     protected $listeners = ['loadFormData' => 'loadFormData'];
 
     public function mount()
@@ -31,6 +33,13 @@ class SubmittedResearchGrants extends Component
     public function viewForm($formId)
     {
         return redirect()->route('research-grants.index', ['formId' => $formId]);
+    }
+
+    public function loadRemarks($formId)
+    {
+        // Load remarks for the selected form
+        $this->remarks = Remark::where('form_id', $formId)->get();
+        $this->dispatchBrowserEvent('showRemarksModal'); // Trigger the modal to open
     }
 
     public function render()

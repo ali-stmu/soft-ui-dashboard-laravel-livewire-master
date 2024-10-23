@@ -25,22 +25,66 @@
                             <td>{{ $form->pi_email }}</td>
                             <td>{{ $form->pi_department }}</td>
                             <td>
-                                {{-- Edit Only for status Returned --}}
                                 @if ($form->status_id == 5)
                                     <button wire:click="editForm({{ $form->id }})"
                                         class="btn btn-info btn-sm">Edit</button>
-                                    <a href="{{ route('research-grants.show', $form->id) }}"
-                                        class="btn btn-primary btn-sm">View</a>
-                                @else
-                                    <a href="{{ route('research-grants.show', $form->id) }}"
-                                        class="btn btn-primary btn-sm">View</a>
+                                    <button wire:click="loadRemarks({{ $form->id }})"
+                                        class="btn btn-secondary btn-sm">View Remarks</button>
                                 @endif
-                            </td>
+                                <a href="{{ route('research-grants.show', $form->id) }}"
+                                    class="btn btn-primary btn-sm">View</a>
 
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
     </div>
+
+    <!-- Remarks Modal -->
+    <div class="modal fade" id="remarksModal" tabindex="-1" aria-labelledby="remarksModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="remarksModalLabel">Remarks for Selected Research Grant</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @if (count($remarks) > 0)
+                        <ul class="list-group">
+                            @foreach ($remarks as $remark)
+                                <li class="list-group-item">
+                                    <strong>{{ $remark->title }}</strong>
+                                    <br>
+                                    <small>By: {{ $remark->director->name }} </small>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p>No remarks available for this form.</p>
+                    @endif
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event to show the modal
+            window.addEventListener('showRemarksModal', event => {
+                $('#remarksModal').modal('show');
+            });
+
+            // Event to hide the modal if needed
+            window.addEventListener('hideRemarksModal', event => {
+                $('#remarksModal').modal('hide');
+            });
+        });
+    </script>
+
 </div>
