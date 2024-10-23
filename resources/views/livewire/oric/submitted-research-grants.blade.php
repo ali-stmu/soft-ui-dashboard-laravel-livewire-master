@@ -4,6 +4,14 @@
     </h1>
 
     <div class="container mt-4">
+        <!-- Search Bar -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Search by Project Title"
+                    wire:model.debounce.500ms="search">
+            </div>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <thead class="thead-dark">
@@ -33,16 +41,20 @@
                                 @endif
                                 <a href="{{ route('research-grants.show', $form->id) }}"
                                     class="btn btn-primary btn-sm">View</a>
-
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+
+            <!-- Pagination Links -->
+            <div class="d-flex justify-content-center">
+                {{ $oricForms->links() }}
+            </div>
         </div>
     </div>
 
-    <!-- Remarks Modal -->
+    <!-- Remarks Modal remains unchanged -->
     <div class="modal fade" id="remarksModal" tabindex="-1" aria-labelledby="remarksModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -73,18 +85,4 @@
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Event to show the modal
-            window.addEventListener('showRemarksModal', event => {
-                $('#remarksModal').modal('show');
-            });
-
-            // Event to hide the modal if needed
-            window.addEventListener('hideRemarksModal', event => {
-                $('#remarksModal').modal('hide');
-            });
-        });
-    </script>
-
 </div>
