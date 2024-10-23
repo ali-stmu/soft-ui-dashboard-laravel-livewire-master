@@ -85,4 +85,18 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event to show the modal
+            window.addEventListener('showRemarksModal', event => {
+                $('#remarksModal').modal('show');
+            });
+
+            // Event to hide the modal if needed
+            window.addEventListener('hideRemarksModal', event => {
+                $('#remarksModal').modal('hide');
+            });
+        });
+    </script>
+
 </div>
