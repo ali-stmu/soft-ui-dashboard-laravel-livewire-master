@@ -7,6 +7,8 @@ use App\Models\OricFormModal;
 use App\Models\Remark;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
+use App\Mail\OricSubmissionReturned;
+use Illuminate\Support\Facades\Mail;
 
 class ViewResearchGrants extends Component
 {
@@ -31,18 +33,18 @@ class ViewResearchGrants extends Component
             'selectedUserId' => $this->selectedUserId,
             'selectedFormId' => $this->selectedFormId,
         ]);
-
+    
         // Validate the input
         $this->validate([
             'remarksTitle' => 'required|string',
             'selectedUserId' => 'required',
             'selectedFormId' => 'required',
         ]);
-
+    
         try {
             // Check if a remark already exists for the selected form
             $remark = Remark::where('form_id', $this->selectedFormId)->first();
-
+    
             if ($remark) {
                 // Update the existing remark
                 $remark->update([
@@ -58,13 +60,27 @@ class ViewResearchGrants extends Component
                     'form_id' => $this->selectedFormId,
                 ]);
             }
+            // Update the ORIC form status
+            $oricForm = OricFormModal::find($this->selectedFormId);
+            if ($oricForm) {
+                $oricForm->status_id = 5; // Set the status_id to 5
+                $oricForm->save();
+            }
 
+    
+            // Fetch the initiator's email
+            $initiatorEmail = OricFormModal::find($this->selectedFormId)->user->email;
+            $initiatorName = OricFormModal::find($this->selectedFormId)->user->name;
+    
+            // Send the email notification
+            Mail::to($initiatorEmail)->send(new OricSubmissionReturned($this->remarksTitle, $initiatorName, $this->selectedFormId));
+    
             // Reset fields
             $this->reset('remarksTitle', 'selectedUserId', 'selectedFormId');
-
+    
             // Show a success message
             session()->flash('message', 'Remark saved successfully!');
-
+    
             // Trigger a page refresh using Livewire's JavaScript
             $this->dispatchBrowserEvent('refresh-page');
         } catch (\Exception $e) {
