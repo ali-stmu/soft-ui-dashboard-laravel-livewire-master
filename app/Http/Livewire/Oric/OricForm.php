@@ -7,6 +7,9 @@ use Livewire\WithFileUploads;
 use App\Models\OricFormModal; // Make sure to import your model
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\OricFormCreated;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 
 class OricForm extends Component
@@ -87,6 +90,13 @@ class OricForm extends Component
         } else {
             $validatedData['user_id'] = Auth::id();
             OricFormModal::create($validatedData);
+        }
+        $directorsOric = User::whereHas('role', function ($query) {
+            $query->where('name', 'Director ORIC');
+        })->get();
+    
+        foreach ($directorsOric as $director) {
+            Mail::to($director->email)->send(new OricFormCreated($validatedData));
         }
 
         session()->flash('message', 'Form submitted successfully.');
