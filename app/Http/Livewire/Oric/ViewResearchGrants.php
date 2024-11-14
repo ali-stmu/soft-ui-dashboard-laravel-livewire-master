@@ -5,6 +5,9 @@ namespace App\Http\Livewire\Oric;
 use Livewire\Component;
 use App\Models\OricFormModal;
 use App\Models\Remark;
+use App\Models\Reviewer;
+use App\Models\Forward;  // Import the Forward model
+
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 use App\Mail\OricSubmissionReturned;
@@ -18,12 +21,42 @@ class ViewResearchGrants extends Component
     public $remarksTitle; // For the remarks input
     public $selectedFormId; // To store the selected ORIC form ID
     public $selectedUserId; // To store the selected user ID
+    public $reviewers = []; // List of all reviewers
+    public $selectedReviewers = []; // Multi-select list of selected reviewers
     protected $paginationTheme = 'bootstrap'; // Optional: Use Bootstrap pagination theme
 
     public function updatingSearch()
     {
         // Reset the page number if the search query is updated
         $this->resetPage();
+    }
+    public function forwardForm()
+    {
+        // Validate the input
+        $this->validate([
+            'selectedFormId' => 'required',
+            'selectedReviewers' => 'required|array|min:1', // Ensure at least one reviewer is selected
+        ]);
+
+        // Handle forwarding (saving selected reviewers with the form)
+        try {
+            // Loop through the selected reviewers and save them in the 'forwards' table
+            foreach ($this->selectedReviewers as $reviewerId) {
+                Forward::create([
+                    'form_id' => $this->selectedFormId,
+                    'director_id' => Auth::id(), // Logged-in user as the director
+                    'reviewer_id' => $reviewerId,
+                ]);
+            }
+
+            // Optionally, send notifications or email after forwarding
+            session()->flash('message', 'Form forwarded successfully!');
+
+            // Reset selected reviewers and close modal
+            $this->reset('selectedFormId', 'selectedReviewers');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Failed to forward form: ' . $e->getMessage());
+        }
     }
 
     public function submitRemark()
@@ -87,6 +120,11 @@ class ViewResearchGrants extends Component
             session()->flash('error', 'Failed to save remark: ' . $e->getMessage());
         }
     }
+    public function mount()
+    {
+        // Load reviewers initially
+        $this->reviewers = Reviewer::all();
+    }
 
     public function render()
     {
@@ -97,6 +135,8 @@ class ViewResearchGrants extends Component
 
         return view('livewire.oric.view-research-grants', [
             'oricForms' => $oricForms,
+            'reviewers' => $this->reviewers, // Pass reviewers to the view
+
         ]);
     }
 }

@@ -36,8 +36,10 @@
                                     class="btn btn-info btn-sm">View</a>
                                 <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#returnModal"
                                     data-user-id="{{ $form->user->id }}" data-id="{{ $form->id }}">Return</button>
-                                <button class="btn btn-success btn-sm" data-id="{{ $form->id }}">Forward</button>
+                                <button class="btn btn-success btn-sm" data-target="#forwardModal"
+                                    data-id="{{ $form->id }}">Forward</button>
                             </td>
+
                         </tr>
                     @empty
                         <tr>
@@ -83,28 +85,82 @@
             </div>
         </div>
     </div>
+    <!-- Forward Modal -->
+    <!-- Forward Modal -->
+    <div class="modal fade" id="forwardModal" tabindex="-1" aria-labelledby="forwardModalLabel" aria-hidden="true"
+        wire:ignore.self>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="forwardModalLabel">Select Reviewers</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="forwardForm" wire:submit.prevent="forwardForm">
+                        <div class="mb-3">
+                            <label class="form-label">Reviewers</label>
+                            <div class="row">
+                                @foreach ($reviewers as $reviewer)
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input"
+                                                id="reviewer{{ $reviewer->id }}" wire:model="selectedReviewers"
+                                                value="{{ $reviewer->id }}">
+                                            <label class="form-check-label" for="reviewer{{ $reviewer->id }}">
+                                                {{ $reviewer->name }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @if (session()->has('message'))
+                            <div class="alert alert-success">
+                                {{ session('message') }}
+                            </div>
+                        @endif
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn" form="forwardForm">Forward</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const returnButtons = document.querySelectorAll(
                 'button[data-toggle="modal"][data-target="#returnModal"]');
+            const forwardButtons = document.querySelectorAll(
+                'button[data-target="#forwardModal"]'); // Add for Forward buttons
 
             returnButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    const userId = this.getAttribute('data-user-id'); // Get the user ID
-                    const formId = this.getAttribute('data-id'); // Get the form ID
-                    @this.set('selectedUserId', userId); // Set the selected user ID in Livewire
-                    @this.set('selectedFormId', formId); // Set the selected form ID in Livewire
+                    const userId = this.getAttribute('data-user-id');
+                    const formId = this.getAttribute('data-id');
+                    @this.set('selectedUserId', userId);
+                    @this.set('selectedFormId', formId);
 
-                    // Ensure the modal is shown after setting values
                     const returnModal = new bootstrap.Modal(document.getElementById('returnModal'));
-                    returnModal.show(); // Show the modal
+                    returnModal.show();
+                });
+            });
+
+            forwardButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const formId = this.getAttribute('data-id');
+                    @this.set('selectedFormId', formId);
+
+                    const forwardModal = new bootstrap.Modal(document.getElementById(
+                        'forwardModal'));
+                    forwardModal.show();
                 });
             });
         });
-
-        window.addEventListener('refresh-page', () => {
-            location.reload();
-        });
     </script>
+
 </div>
