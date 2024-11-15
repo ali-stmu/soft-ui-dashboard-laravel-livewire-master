@@ -7,7 +7,7 @@ use App\Models\OricFormModal;
 use App\Models\Remark;
 use App\Models\Reviewer;
 use App\Models\Forward;  // Import the Forward model
-
+use App\Mail\OricFormForwarded; // Import the mailable class
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 use App\Mail\OricSubmissionReturned;
@@ -37,21 +37,31 @@ class ViewResearchGrants extends Component
             'selectedFormId' => 'required',
             'selectedReviewers' => 'required|array|min:1', // Ensure at least one reviewer is selected
         ]);
-
-        // Handle forwarding (saving selected reviewers with the form)
+    
         try {
+            // Get the selected form title
+            $form = OricFormModal::find($this->selectedFormId);
+            $formTitle = $form->project_title;
+    
             // Loop through the selected reviewers and save them in the 'forwards' table
             foreach ($this->selectedReviewers as $reviewerId) {
+                // Save the forward record
                 Forward::create([
                     'form_id' => $this->selectedFormId,
                     'director_id' => Auth::id(), // Logged-in user as the director
                     'reviewer_id' => $reviewerId,
                 ]);
+    
+                // Get reviewer details
+                $reviewer = Reviewer::find($reviewerId);
+                $reviewerName = $reviewer->name;
+    
+                // Send email to the reviewer
+                Mail::to($reviewer->email)->send(new OricFormForwarded($formTitle, $reviewerName, $this->selectedFormId));
             }
-
-            // Optionally, send notifications or email after forwarding
+    
             session()->flash('message', 'Form forwarded successfully!');
-
+    
             // Reset selected reviewers and close modal
             $this->reset('selectedFormId', 'selectedReviewers');
         } catch (\Exception $e) {
