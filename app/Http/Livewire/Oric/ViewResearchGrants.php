@@ -43,6 +43,11 @@ class ViewResearchGrants extends Component
             $form = OricFormModal::find($this->selectedFormId);
             $formTitle = $form->project_title;
     
+            // Update the status of the form to 1 (assuming 1 represents 'Forwarded')
+            $form->update([
+                'status_id' => 1,  // Set the status to 'Forwarded' (assuming 1 represents this)
+            ]);
+    
             // Loop through the selected reviewers and save them in the 'forwards' table
             foreach ($this->selectedReviewers as $reviewerId) {
                 // Save the forward record
@@ -50,7 +55,7 @@ class ViewResearchGrants extends Component
                     'form_id' => $this->selectedFormId,
                     'director_id' => Auth::id(), // Logged-in user as the director
                     'reviewer_id' => $reviewerId,
-                    'status' => 1,
+                    'status' => 1, // Status of the forward action, assuming 1 means forwarded
                 ]);
     
                 // Get reviewer details
@@ -69,7 +74,7 @@ class ViewResearchGrants extends Component
             session()->flash('error', 'Failed to forward form: ' . $e->getMessage());
         }
     }
-
+    
     public function submitRemark()
     {
         \Log::info('Submit Remark called', [
@@ -166,11 +171,16 @@ class ViewResearchGrants extends Component
         $oricForms = OricFormModal::where('project_title', 'like', '%' . $this->search . '%')
             ->orWhere('pi_name', 'like', '%' . $this->search . '%')
             ->paginate(10);
-
+    
+        // Determine if the form is forwarded or not
+        foreach ($oricForms as $form) {
+            $form->is_forwarded = Forward::where('form_id', $form->id)->exists();
+        }
+    
         return view('livewire.oric.view-research-grants', [
             'oricForms' => $oricForms,
             'reviewers' => $this->reviewers, // Pass reviewers to the view
-
         ]);
     }
+    
 }

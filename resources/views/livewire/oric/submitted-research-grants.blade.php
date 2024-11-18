@@ -16,28 +16,32 @@
             <table class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
+                        <th>Sr.No</th> <!-- Added serial number header -->
                         <th>Project Title</th>
                         <th>PI Name</th>
-                        <th>PI Designation</th>
-                        <th>PI Email</th>
+                        {{-- <th>PI Designation</th>
+                        <th>PI Email</th> --}}
                         <th>PI Department</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($oricForms as $form)
+                    @foreach ($oricForms as $index => $form)
                         <tr>
+                            <td>{{ $loop->iteration + ($oricForms->currentPage() - 1) * $oricForms->perPage() }}</td>
+                            <!-- Serial number -->
                             <td>{{ $form->project_title }}</td>
                             <td>{{ $form->pi_name }}</td>
-                            <td>{{ $form->pi_designation }}</td>
-                            <td>{{ $form->pi_email }}</td>
+                            {{-- <td>{{ $form->pi_designation }}</td>
+                            <td>{{ $form->pi_email }}</td> --}}
                             <td>{{ $form->pi_department }}</td>
                             <td>
                                 @if ($form->status_id == 5)
                                     <button wire:click="editForm({{ $form->id }})"
                                         class="btn btn-info btn-sm">Edit</button>
                                     <button wire:click="loadRemarks({{ $form->id }})"
-                                        class="btn btn-secondary btn-sm">View Remarks</button>
+                                        class="btn btn-secondary btn-sm">View Director Remarks</button>
+                                    <button wire:click="" class="btn btn-info btn-sm">View Reviewer Remarks</button>
                                 @endif
                                 <a href="{{ route('research-grants.show', $form->id) }}"
                                     class="btn btn-primary btn-sm">View</a>

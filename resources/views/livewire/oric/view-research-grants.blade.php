@@ -13,41 +13,50 @@
             <table class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
+                        <th>Serial No</th>
                         <th>Project Title</th>
                         <th>PI Name</th>
                         <th>Initiated By</th>
-                        <th>PI Designation</th>
-                        <th>PI Email</th>
+                        {{-- <th>PI Designation</th>
+                        <th>PI Email</th> --}}
                         <th>PI Department</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($oricForms as $form)
-                        <tr>
+                        <tr
+                            class="{{ $form->status_id == 5 ? 'table-danger' : '' }} 
+                                   {{ $form->is_forwarded ? 'table-success' : '' }}">
+                            <td>{{ ($oricForms->currentPage() - 1) * $oricForms->perPage() + $loop->iteration }}</td>
                             <td>{{ $form->project_title }}</td>
                             <td>{{ $form->pi_name }}</td>
                             <td>{{ $form->user->name }}</td>
-                            <td>{{ $form->pi_designation }}</td>
-                            <td>{{ $form->pi_email }}</td>
                             <td>{{ $form->pi_department }}</td>
                             <td>
                                 <a href="{{ route('research-grants.show', $form->id) }}"
                                     class="btn btn-info btn-sm">View</a>
-                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#returnModal"
-                                    data-user-id="{{ $form->user->id }}" data-id="{{ $form->id }}">Return</button>
-                                <button class="btn btn-success btn-sm" data-target="#forwardModal"
-                                    data-id="{{ $form->id }}">Forward</button>
+                                @if ($form->status_id != 5)
+                                    <button class="btn btn-warning btn-sm" data-toggle="modal"
+                                        data-target="#returnModal" data-user-id="{{ $form->user->id }}"
+                                        data-id="{{ $form->id }}">Return</button>
+                                    <button class="btn btn-success btn-sm" data-target="#forwardModal"
+                                        data-id="{{ $form->id }}">Forward</button>
+                                @endif
                             </td>
-
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center">No research grants found.</td>
+                            <td colspan="6" class="text-center">No research grants found.</td>
                         </tr>
                     @endforelse
                 </tbody>
+
             </table>
+
+
+
+
         </div>
 
         <!-- Pagination -->
