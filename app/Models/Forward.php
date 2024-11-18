@@ -17,6 +17,7 @@ class Forward extends Model
         'form_id',
         'director_id',
         'reviewer_id',
+        'status',
     ];
 
     /**
