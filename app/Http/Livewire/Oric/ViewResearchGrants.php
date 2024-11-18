@@ -50,6 +50,7 @@ class ViewResearchGrants extends Component
                     'form_id' => $this->selectedFormId,
                     'director_id' => Auth::id(), // Logged-in user as the director
                     'reviewer_id' => $reviewerId,
+                    'status' => 1,
                 ]);
     
                 // Get reviewer details
@@ -132,10 +133,33 @@ class ViewResearchGrants extends Component
     }
     public function mount()
     {
-        // Load reviewers initially
-        $this->reviewers = Reviewer::all();
+        if ($this->selectedFormId) {
+            // Get the reviewer IDs already forwarded for the selected form
+            $forwardedReviewerIds = Forward::where('form_id', $this->selectedFormId)
+                ->pluck('reviewer_id')
+                ->toArray();
+    
+            // Fetch reviewers excluding the forwarded ones
+            $this->reviewers = Reviewer::whereNotIn('id', $forwardedReviewerIds)->get();
+        } else {
+            // Fetch all reviewers if no form is selected
+            $this->reviewers = Reviewer::all();
+        }
+    }
+    public function updatedSelectedFormId($formId)
+    {
+        if ($formId) {
+            $forwardedReviewerIds = Forward::where('form_id', $formId)
+                ->pluck('reviewer_id')
+                ->toArray();
+
+            $this->reviewers = Reviewer::whereNotIn('id', $forwardedReviewerIds)->get();
+        } else {
+            $this->reviewers = Reviewer::all();
+        }
     }
 
+    
     public function render()
     {
         // Fetch paginated results based on the search query

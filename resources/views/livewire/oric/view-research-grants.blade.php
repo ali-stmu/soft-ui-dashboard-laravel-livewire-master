@@ -160,6 +160,7 @@
                     forwardModal.show();
                 });
             });
+
         });
     </script>
 
