@@ -81,7 +81,27 @@ class MyRequest extends Component
     
         $document = Document::create($validatedData);
         
-        // Handle approval request creation and notifications...
+        $documentUser = User::find($document->user_id);
+        $approvalRequestData = [
+            'document_id' => $document->id,
+            'assigned_by_id' => Auth::id(),
+            'created_by_id' => Auth::id(),
+            'assigned_id' => $document->user_id,
+            'department_id' => $documentUser->department_id,
+        ];
+    
+        ApprovalRequest::create($approvalRequestData);
+    
+        // Fetch users for notification
+        $assignedUser = User::find($document->user_id);
+        $dispatcher = User::find($document->dispatcher_id);
+        $creator = Auth::user();
+    
+        // Send email notifications
+        \Mail::to($assignedUser->email)->cc([$creator->email])->send(new \App\Mail\DocumentAssignedNotification($document, $assignedUser, $creator));
+        \Mail::to($creator->email)->send(new \App\Mail\DocumentCreatedNotification($document, $creator));
+        //\Mail::to($dispatcher->email)->send(new \App\Mail\DispatcherNotification($document, $dispatcher, $creator));
+    
     
         $this->reset();
         session()->flash('message', 'Request saved successfully.');
