@@ -104,7 +104,7 @@
                     <td>{{ $reviewer->name }}</td>
                     <td>{{ $reviewer->email }}</td>
                     <td>{{ $reviewer->designation }}</td>
-                    <td>{{ $reviewer->institute_name }}</td>
+                    <td>{{ $reviewer->institute }}</td>
                     <td>{{ $reviewer->country }}</td>
                     <td>
                         <button wire:click="edit({{ $reviewer->id }})" class="btn btn-primary">Edit</button>

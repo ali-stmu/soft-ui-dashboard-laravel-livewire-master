@@ -45,6 +45,9 @@ class User extends Authenticatable
         'role_id',
         'status',
         'created_by_id',
+        'country',
+        'institute',
+        'designation',
     ];
 
     /**
