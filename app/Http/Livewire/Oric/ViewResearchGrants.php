@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 use App\Mail\OricSubmissionReturned;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class ViewResearchGrants extends Component
 {
@@ -32,48 +33,55 @@ class ViewResearchGrants extends Component
     }
     public function forwardForm()
     {
-        // Validate the input
         $this->validate([
             'selectedFormId' => 'required',
             'selectedReviewers' => 'required|array|min:1', // Ensure at least one reviewer is selected
         ]);
     
         try {
-            // Get the selected form title
-            $form = OricFormModal::find($this->selectedFormId);
+            Log::debug("inside try");
+    
+            // Get the selected form
+            $form = OricFormModal::findOrFail($this->selectedFormId);
             $formTitle = $form->project_title;
+            Log::debug($formTitle);
     
-            // Update the status of the form to 1 (assuming 1 represents 'Forwarded')
-            $form->update([
-                'status_id' => 1,  // Set the status to 'Forwarded' (assuming 1 represents this)
-            ]);
+            // Update the form status
+            $form->update(['status_id' => 1]); // Assuming 1 represents 'Forwarded'
     
-            // Loop through the selected reviewers and save them in the 'forwards' table
-            foreach ($this->selectedReviewers as $reviewerId) {
-                // Save the forward record
+            // Filter valid reviewers
+            $validReviewers = \App\Models\User::where('role_id', 11)
+                ->whereIn('id', $this->selectedReviewers)
+                ->pluck('id')
+                ->toArray();
+    
+            if (count($validReviewers) !== count($this->selectedReviewers)) {
+                throw new \Exception("One or more selected reviewers are invalid.");
+            }
+    
+            // Insert into the forwards table
+            foreach ($validReviewers as $reviewerId) {
                 Forward::create([
                     'form_id' => $this->selectedFormId,
                     'director_id' => Auth::id(), // Logged-in user as the director
                     'reviewer_id' => $reviewerId,
-                    'status' => 1, // Status of the forward action, assuming 1 means forwarded
+                    'status' => 1, // Assuming 1 means forwarded
                 ]);
     
-                // Get reviewer details
-                $reviewer = Reviewer::find($reviewerId);
-                $reviewerName = $reviewer->name;
-    
-                // Send email to the reviewer
-                Mail::to($reviewer->email)->send(new OricFormForwarded($formTitle, $reviewerName, $this->selectedFormId));
+                // Notify the reviewer
+                $reviewer = \App\Models\User::find($reviewerId);
+                Mail::to($reviewer->email)->send(new OricFormForwarded($formTitle, $reviewer->name, $this->selectedFormId));
             }
     
             session()->flash('message', 'Form forwarded successfully!');
-    
-            // Reset selected reviewers and close modal
             $this->reset('selectedFormId', 'selectedReviewers');
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             session()->flash('error', 'Failed to forward form: ' . $e->getMessage());
         }
     }
+    
+    
     
     public function submitRemark()
     {
@@ -139,31 +147,39 @@ class ViewResearchGrants extends Component
     public function mount()
     {
         if ($this->selectedFormId) {
-            // Get the reviewer IDs already forwarded for the selected form
+            // Get the user IDs (reviewers) already forwarded for the selected form
             $forwardedReviewerIds = Forward::where('form_id', $this->selectedFormId)
-                ->pluck('reviewer_id')
+                ->pluck('user_id') // Changed from `reviewer_id` to `user_id`
                 ->toArray();
     
-            // Fetch reviewers excluding the forwarded ones
-            $this->reviewers = Reviewer::whereNotIn('id', $forwardedReviewerIds)->get();
+            // Fetch users with role_id = 11 (reviewers), excluding the forwarded ones
+            $this->reviewers = \App\Models\User::where('role_id', 11)
+                ->whereNotIn('id', $forwardedReviewerIds)
+                ->get();
         } else {
-            // Fetch all reviewers if no form is selected
-            $this->reviewers = Reviewer::all();
+            // Fetch all users with role_id = 11 if no form is selected
+            $this->reviewers = \App\Models\User::where('role_id', 11)->get();
         }
     }
+    
     public function updatedSelectedFormId($formId)
     {
         if ($formId) {
+            // Get the user IDs (reviewers) already forwarded for the selected form
             $forwardedReviewerIds = Forward::where('form_id', $formId)
-                ->pluck('reviewer_id')
+                ->pluck('reviewer_id') // Changed from `reviewer_id` to `user_id`
                 ->toArray();
-
-            $this->reviewers = Reviewer::whereNotIn('id', $forwardedReviewerIds)->get();
+    
+            // Fetch users with role_id = 11 (reviewers), excluding the forwarded ones
+            $this->reviewers = \App\Models\User::where('role_id', 11)
+                ->whereNotIn('id', $forwardedReviewerIds)
+                ->get();
         } else {
-            $this->reviewers = Reviewer::all();
+            // Fetch all users with role_id = 11 if no form is selected
+            $this->reviewers = \App\Models\User::where('role_id', 11)->get();
         }
     }
-
+    
     
     public function render()
     {

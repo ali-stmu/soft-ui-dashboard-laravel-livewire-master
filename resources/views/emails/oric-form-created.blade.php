@@ -78,7 +78,7 @@
         </ul>
         <div class="cta">
             <p>Please log in to your account for further details:</p>
-            <a href="https://cms.stmu.edu.pk/" target="_blank">Login to Your Account</a>
+            <a href="https://diary.stmu.edu.pk/" target="_blank">Login to Your Account</a>
         </div>
     </div>
 </body>

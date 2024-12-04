@@ -41,6 +41,6 @@ class Forward extends Model
      */
     public function reviewer()
     {
-        return $this->belongsTo(Reviewer::class, 'reviewer_id');
+        return $this->belongsTo(User::class, 'reviewer_id');
     }
 }
