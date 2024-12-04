@@ -25,7 +25,7 @@ class Forward extends Model
      */
     public function form()
     {
-        return $this->belongsTo(OricForm::class, 'form_id');
+        return $this->belongsTo(OricFormModal::class, 'form_id');
     }
 
     /**
