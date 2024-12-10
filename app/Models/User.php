@@ -47,7 +47,7 @@ class User extends Authenticatable
         'created_by_id',
         'country',
         'institute',
-        'designation',
+        'designation_name',
     ];
 
     /**

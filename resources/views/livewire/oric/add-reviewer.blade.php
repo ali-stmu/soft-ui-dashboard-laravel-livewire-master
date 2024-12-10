@@ -32,8 +32,8 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Designation:</label>
-                    <input type="text" class="form-control" wire:model="designation">
-                    @error('designation')
+                    <input type="text" class="form-control" wire:model="designation_name">
+                    @error('designation_name')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
@@ -103,7 +103,7 @@
                 <tr>
                     <td>{{ $reviewer->name }}</td>
                     <td>{{ $reviewer->email }}</td>
-                    <td>{{ $reviewer->designation }}</td>
+                    <td>{{ $reviewer->designation_name }}</td>
                     <td>{{ $reviewer->institute }}</td>
                     <td>{{ $reviewer->country }}</td>
                     <td>

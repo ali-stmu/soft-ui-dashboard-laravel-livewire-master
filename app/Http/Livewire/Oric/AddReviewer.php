@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Mail;
 
 class AddReviewer extends Component
 {
-    public $name, $email, $designation, $institute_name, $country, $password, $reviewer_id;
+    public $name, $email, $designation_name, $institute_name, $country, $password, $reviewer_id;
     public $updateMode = false;
     public $search = ''; // Add a property for the search query
 
@@ -19,7 +19,7 @@ class AddReviewer extends Component
     {
         $this->name = '';
         $this->email = '';
-        $this->designation = '';
+        $this->designation_name = '';
         $this->institute_name = '';
         $this->country = '';
         $this->password = '';
@@ -30,7 +30,7 @@ class AddReviewer extends Component
         $validatedData = $this->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'designation' => 'required',
+            'designation_name' => 'required',
             'institute_name' => 'required',
             'country' => 'required',
             'password' => 'required|min:6',
@@ -43,7 +43,7 @@ class AddReviewer extends Component
             'password' => Hash::make($this->password),
             'country' => $this->country,  // Adding country
             'institute' => $this->institute_name,
-            'designation' => $this->designation,
+            'designation_name' => $this->designation_name,
             'role_id' => 11, // Assigning role_id = 11
         ]);
 
@@ -63,7 +63,7 @@ class AddReviewer extends Component
         $this->reviewer_id = $id;
         $this->name = $user->name;
         $this->email = $user->email;
-        $this->designation = $user->designation;
+        $this->designation_name = $user->designation_name;
         $this->institute_name = $user->institute;
         $this->country = $user->country;
 
@@ -82,7 +82,7 @@ class AddReviewer extends Component
                 'email',
                 Rule::unique('users', 'email')->ignore($user->id), // Ignore current user's email
             ],
-            'designation' => 'required',
+            'designation_name' => 'required',
             'institute_name' => 'required',
             'country' => 'required',
         ]);
@@ -91,7 +91,7 @@ class AddReviewer extends Component
         $user->update([
             'name' => $this->name,
             'email' => $this->email,
-            'designation' => $this->designation,
+            'designation_name' => $this->designation_name,
             'institute' => $this->institute_name,
             'country' => $this->country,
         ]);
@@ -118,7 +118,7 @@ class AddReviewer extends Component
             ->where(function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%')
                       ->orWhere('email', 'like', '%' . $this->search . '%')
-                      ->orWhere('designation', 'like', '%' . $this->search . '%')
+                      ->orWhere('designation_name', 'like', '%' . $this->search . '%')
                       ->orWhere('institute', 'like', '%' . $this->search . '%')
                       ->orWhere('country', 'like', '%' . $this->search . '%');
             })
