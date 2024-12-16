@@ -28,9 +28,11 @@
                             <a href="{{ route('research-grants.show', $forward->form->id) }}"
                                 class="btn btn-primary btn-sm">View</a>
                             <!-- Evaluate Now button -->
-                            <a class="btn btn-secondary btn-sm" wire:click="evaluateNow({{ $forward->form->id }})">
+                            <a class="btn btn-secondary btn-sm"
+                                wire:click="redirectToEvaluation({{ $forward->form->id }})">
                                 Evaluate Now
                             </a>
+
                         </td>
                     </tr>
                 @endforeach

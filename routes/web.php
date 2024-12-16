@@ -33,6 +33,7 @@ use App\Http\Livewire\Oric\ViewResearchGrants;
 use App\Http\Livewire\Oric\ShowResearchGrant;
 use App\Http\Livewire\Oric\SubmittedResearchGrants;
 use App\Http\Livewire\Oric\ReviewerEvaluationForms;
+use App\Http\Livewire\Oric\EvaluationForm;
 
 
 use Illuminate\Http\Request;
@@ -93,6 +94,7 @@ Route::middleware('auth')->group(function () {
         // Add the ReviewerEvaluationForms route
         Route::get('/reviewer-evaluation-forms', ReviewerEvaluationForms::class)
             ->name('reviewer-evaluation-forms');
+            Route::get('/evaluation-form', EvaluationForm::class)->name('evaluation-form');
     });
 
 

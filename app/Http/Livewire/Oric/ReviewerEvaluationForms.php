@@ -46,4 +46,10 @@ class ReviewerEvaluationForms extends Component
             'assignedForms' => $this->getAssignedForms(),
         ]);
     }
+    public function redirectToEvaluation($formId)
+{
+    // Optionally store the form ID in the session or perform additional logic
+    return redirect()->route('evaluation-form', ['formId' => $formId]);
+}
+
 }
